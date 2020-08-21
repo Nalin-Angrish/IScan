@@ -1,0 +1,2 @@
+include ':app', ':libraries:OpenCV'
+rootProject.name='IScan'
