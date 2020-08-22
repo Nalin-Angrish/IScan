@@ -9,8 +9,10 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.ArrayList;
+
 class ImageProcessor {
-    public static Bitmap ConvertToGrayScale(Bitmap image){
+    private static Bitmap toGrayScale(Bitmap image){
         Mat myImage = new Mat();
         Utils.bitmapToMat(image, myImage);
 
@@ -24,7 +26,9 @@ class ImageProcessor {
         return greyImage;
     }
 
-    public static Bitmap DetectEdges(Bitmap image){
+    public static ArrayList<Point> getCorners(Bitmap img){
+        Bitmap image = toGrayScale(img);
+
         Mat myImage = new Mat();
         Utils.bitmapToMat(image, myImage);
 
@@ -35,7 +39,7 @@ class ImageProcessor {
         Bitmap edgedImage = Bitmap.createBitmap(myImage.width(), myImage.height(), config);
 
         Utils.matToBitmap(myImage, edgedImage);
-        return edgedImage;
+        return new ArrayList<>();
     }
 
 
