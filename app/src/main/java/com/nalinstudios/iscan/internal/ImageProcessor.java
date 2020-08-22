@@ -10,7 +10,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 class ImageProcessor {
-    static Bitmap ConvertToGrayScale(Bitmap image){
+    public static Bitmap ConvertToGrayScale(Bitmap image){
         Mat myImage = new Mat();
         Utils.bitmapToMat(image, myImage);
 
@@ -24,7 +24,7 @@ class ImageProcessor {
         return greyImage;
     }
 
-    static Bitmap DetectEdges(Bitmap image){
+    public static Bitmap DetectEdges(Bitmap image){
         Mat myImage = new Mat();
         Utils.bitmapToMat(image, myImage);
 
