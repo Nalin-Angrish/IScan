@@ -19,7 +19,6 @@ import android.view.Gravity;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -128,9 +127,6 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                     OutputStream imgStream = new FileOutputStream(mFile);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imgStream);
                     try {Thread.sleep(700);}catch (InterruptedException e){Log.e("Couldn't wait", e.toString());}
-
-                    ImageView thumbnail = findViewById(R.id.imageThumb);
-                    thumbnail.setImageBitmap(bitmap);
                     count = count+1;
                 }catch (IOException e){
                     Toast.makeText(getApplicationContext(), "Couldn't Click picture. Please Try again...", Toast.LENGTH_LONG).show();

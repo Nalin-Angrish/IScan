@@ -29,30 +29,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_media_next" />
 
-    <ImageView
-        android:id="@+id/imageThumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:translationX="20dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/app_name"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:minWidth="40dp"
-        android:minHeight="40dp"
-        app:layout_constraintBottom_toBottomOf="@id/NextB"
-        app:layout_constraintEnd_toStartOf="@id/NextB"
-        app:srcCompat="@android:drawable/screen_background_light_transparent" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:scaleY="2"
-        android:scaleX="2"
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:clickable="true"
         android:focusable="true"
+        android:scaleX="2"
+        android:scaleY="2"
         app:backgroundTint="#00FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
