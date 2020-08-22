@@ -1,4 +1,4 @@
-package com.nalinstudios.iscan;
+package com.nalinstudios.iscan.internal;
 
 import android.graphics.Bitmap;
 

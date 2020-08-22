@@ -1,4 +1,4 @@
-package com.nalinstudios.iscan;
+package com.nalinstudios.iscan.internal;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,16 +16,18 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import com.nalinstudios.iscan.R;
+
 import java.io.File;
 
-class PdfCard{
+public class PdfCard{
     private View content;
     private ImageView thumbnail;
     private TextView title;
     private ImageButton view, share;
     private Context context;
 
-    PdfCard(Context con, File file, LayoutInflater inflater){
+    public PdfCard(Context con, File file, LayoutInflater inflater){
         context = con;
         content = inflater.inflate(R.layout.pdf_card, null);
         thumbnail = content.findViewById(R.id.pdfThumbnail);
@@ -35,7 +37,7 @@ class PdfCard{
         init(file);
     }
 
-    View getCard(){
+    public View getCard(){
         CardView card = new CardView(context);
         card.addView(content);
         int color = Color.rgb(255,255,255);

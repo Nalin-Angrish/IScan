@@ -1,4 +1,4 @@
-package com.nalinstudios.iscan;
+package com.nalinstudios.iscan.internal;
 
 import android.app.Application;
 import android.content.Context;
@@ -23,10 +23,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-class Statics {
+public class Statics {
     private final static String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-    static String randString(){
+    public static String randString(){
         StringBuilder builder = new StringBuilder();
         for (int i = 0;i<10;i++){
             int index = (int)(chars.length() * Math.random());
@@ -35,7 +35,7 @@ class Statics {
         return builder.toString();
     }
 
-    static void createPdf(Application app, String name) throws IOException, DocumentException {
+    public static void createPdf(Application app, String name) throws IOException, DocumentException {
         File pdfFolder = new File(Environment.getExternalStorageDirectory(), "IScan");
         if (!pdfFolder.exists()){System.out.println(pdfFolder.mkdir());}
         File pdf = new File(pdfFolder, name+".pdf");
@@ -80,7 +80,7 @@ class Statics {
         return baos.toByteArray();
     }
 
-    private static void clearData(Application app){
+    public static void clearData(Application app){
         File folder = app.getFilesDir();
         File deletable = new File(folder, app.getSharedPreferences("IScan", Context.MODE_PRIVATE).getString("sessionName", "hello"));
         try {

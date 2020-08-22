@@ -20,8 +20,8 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nalinstudios.iscan.internal.Statics;
 
-import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 
@@ -41,11 +41,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_view);
-        if (!OpenCVLoader.initDebug()){
-            Toast.makeText(getApplicationContext(), "Couldn't initialize OpenCV. Try again.", Toast.LENGTH_LONG).show();
-        }else {
-            main();
-        }
+        main();
     }
 
     protected void main(){
