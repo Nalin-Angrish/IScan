@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
+import com.nalinstudios.iscan.internal.ZoomHandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +42,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     TextView countView;
     int count = 0;
     boolean flash = true;
+    ZoomHandler zoomHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,8 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                 params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
             }
             camera.setParameters(params);
+            zoomHandler = new ZoomHandler(camera, findViewById(R.id.camView).getContext());
+            texture.setOnTouchListener(zoomHandler);
             camera.startPreview();
         } catch (Exception e) {
             Log.e("Opening Camera", e.toString());
