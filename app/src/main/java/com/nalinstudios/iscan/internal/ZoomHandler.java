@@ -26,14 +26,18 @@ public class ZoomHandler implements View.OnTouchListener, ScaleGestureDetector.O
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        scaleFactor *= detector.getScaleFactor();
-        scaleFactor = (scaleFactor < 1 ? 1 : scaleFactor); // prevent our view from becoming too small //
-        scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
         if (camera.getParameters().isZoomSupported()){
+            float defaultScale = scaleFactor;
+            scaleFactor *= detector.getScaleFactor();
+            scaleFactor = (scaleFactor < 1 ? 1 : scaleFactor); // prevent our view from becoming too small //
+            scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+
             if (camera.getParameters().getMaxZoom() >= scaleFactor && scaleFactor > 0){
                 Camera.Parameters params = camera.getParameters();
                 params.setZoom((int)scaleFactor);
                 camera.setParameters(params);
+            }else {
+                scaleFactor = defaultScale;
             }
         }
         return true;
