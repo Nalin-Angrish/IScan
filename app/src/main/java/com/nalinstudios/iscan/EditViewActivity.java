@@ -23,6 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
 
 
+import org.opencv.android.InstallCallbackInterface;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
 import java.io.File;
 
 @SuppressWarnings("ConstantConditions")
