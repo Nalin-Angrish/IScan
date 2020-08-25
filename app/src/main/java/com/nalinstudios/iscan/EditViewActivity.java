@@ -1,6 +1,7 @@
 package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,14 +21,14 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nalinstudios.iscan.graphics.Corner;
+import com.nalinstudios.iscan.graphics.ImageProcessor;
 import com.nalinstudios.iscan.internal.Statics;
 
-
-import org.opencv.android.InstallCallbackInterface;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Point;
 
 import java.io.File;
+import java.util.List;
 
 @SuppressWarnings("ConstantConditions")
 public class EditViewActivity extends AppCompatActivity implements View.OnClickListener {
@@ -40,11 +41,11 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
     final int MIN_DISTANCE = 100;
     float x1, x2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_view);
+        System.loadLibrary("opencv_java");
         main();
     }
 
@@ -63,8 +64,20 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         File imageFile = dir.listFiles()[index];
         Bitmap image = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
         imgview = findViewById(R.id.preview);
-        imgview.setImageBitmap(image);
+        imgview.setImageBitmap(ImageProcessor.getCorners(image));
+
+        /*
+        List<Point> points = ImageProcessor.getCorners(image);
+        for (Point point : points){
+            int length = image.getWidth();
+            int height = image.getHeight();
+            int leftPercent = (int)((point.x/length)*100);
+            int topPercent = (int)((point.y/height)*100);
+            Corner corner = new Corner(leftPercent, topPercent, (ConstraintLayout)findViewById(R.id.cornerLayer), this);
+        }*/
     }
+
+
 
     protected void deleteCurrentPic(){
         File fileToBeDeleted = dir.listFiles()[index];
@@ -115,7 +128,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             try {
                 File imagefile = dir.listFiles()[index];
                 Bitmap bitmap = BitmapFactory.decodeFile(imagefile.getAbsolutePath());
-                imgview.setImageBitmap(bitmap);
+                imgview.setImageBitmap(ImageProcessor.getCorners(bitmap));     //TODO: change this line when cropping will be enabled
             }catch (Exception e){
                 index=index-1;
                 e.printStackTrace();
@@ -125,7 +138,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             try {
                 File imagefile = dir.listFiles()[index];
                 Bitmap bitmap = BitmapFactory.decodeFile(imagefile.getAbsolutePath());
-                imgview.setImageBitmap(bitmap);
+                imgview.setImageBitmap(ImageProcessor.getCorners(bitmap));      //TODO: change this line when cropping will be enabled
             }catch (Exception e){
                 index=index+1;
                 e.printStackTrace();

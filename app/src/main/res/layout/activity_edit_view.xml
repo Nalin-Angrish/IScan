@@ -6,17 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".EditViewActivity">
 
-    <ImageView
-        android:id="@+id/preview"
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:contentDescription="@string/title_activity_view_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cornerLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/title_activity_view_edit"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/nextButton"
