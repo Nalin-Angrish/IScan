@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.nalinstudios.iscan.graphics.Corner;
 import com.nalinstudios.iscan.graphics.ImageProcessor;
 import com.nalinstudios.iscan.internal.Statics;
 
