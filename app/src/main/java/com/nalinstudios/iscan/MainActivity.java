@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         clear();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getApplicationContext().getSharedPreferences("IScan", MODE_PRIVATE).edit().putString("sessionName", Statics.randString()).apply();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,18 +35,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        File storage = new File(Environment.getExternalStorageDirectory(), "IScan");
-        File folder = new File(storage, ".data-internal");
-        File[] files = folder.listFiles();
-        try {
-            for (File file : files) {
-                PdfCard pdfCard = new PdfCard(getApplicationContext(), file, getLayoutInflater());
-                LinearLayout main = findViewById(R.id.__main__);
-                main.addView(pdfCard.getCard());
-            }
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
     }
 
     protected void clear(){

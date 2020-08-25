@@ -1,0 +1,102 @@
+public static List<Point> getPoints(Bitmap image){
+        Mat img = new Mat();
+        Utils.bitmapToMat(image, img);
+
+        Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.GaussianBlur(img, img, new Size(3,3), 2, 2);
+
+        Imgproc.Canny(img, img, 20, 60, 3, false);
+        Imgproc.dilate(img, img, new Mat(), new Point(-1,-1), 3, 1, new Scalar(1));
+
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        Imgproc.findContours(img, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+        List<MatOfPoint> squares = new ArrayList<>();
+        List<MatOfPoint> hulls = new ArrayList<>();
+        MatOfInt hull = new MatOfInt();
+        MatOfPoint2f approx = new MatOfPoint2f();
+        approx.convertTo(approx, CvType.CV_32F);
+
+        for (MatOfPoint contour: contours) {
+            // Convex hull of border
+            Imgproc.convexHull(contour, hull);
+
+            // Calculating new outline points with convex hull
+            Point[] contourPoints = contour.toArray();
+            int[] indices = hull.toArray();
+            List<Point> newPoints = new ArrayList<>();
+            for (int index : indices) {
+                newPoints.add(contourPoints[index]);
+            }
+            MatOfPoint2f contourHull = new MatOfPoint2f();
+            contourHull.fromList(newPoints);
+
+            // Polygon fitting convex hull border (less accurate fitting at this point)
+            Imgproc.approxPolyDP(contourHull, approx, Imgproc.arcLength(contourHull, true)*0.02, true);
+
+            // A convex quadrilateral with an area greater than a certain threshold and a quadrilateral with angles close to right angles is selected
+            MatOfPoint approxf1 = new MatOfPoint();
+            approx.convertTo(approxf1, CvType.CV_32S);
+            if (approx.rows() == 4 && Math.abs(Imgproc.contourArea(approx)) > 40000 &&
+                    Imgproc.isContourConvex(approxf1)) {
+                double maxCosine = 0;
+                for (int j = 2; j < 5; j++) {
+                    double cosine = Math.abs(getAngle(approxf1.toArray()[j%4], approxf1.toArray()[j-2], approxf1.toArray()[j-1]));
+                    maxCosine = Math.max(maxCosine, cosine);
+                }
+                // The angle is about 72 degrees
+                if (maxCosine < 0.3) {
+                    MatOfPoint tmp = new MatOfPoint();
+                    contourHull.convertTo(tmp, CvType.CV_32S);
+                    squares.add(approxf1);
+                    hulls.add(tmp);
+                }
+            }
+        }
+
+
+        int index = findLargestSquare(squares);
+        if (index == -1) {
+            List<Point> points = new ArrayList<>();
+            points.add(new Point(0,0));
+            return points;
+        }
+        MatOfPoint largest_square = squares.get(index);
+        if (largest_square.rows() == 0 || largest_square.cols() == 0)
+            return null;
+
+
+        MatOfPoint contourHull = hulls.get(index);
+        MatOfPoint2f tmp = new MatOfPoint2f();
+        contourHull.convertTo(tmp, CvType.CV_32F);
+        Imgproc.approxPolyDP(tmp, approx, 3, true);
+        List<Point> newPointList = new ArrayList<>();
+        double maxL = Imgproc.arcLength(approx, true) * 0.02;
+
+
+        for (Point p : approx.toArray()) {
+            if (!(getSpacePointToPoint(p, largest_square.toList().get(0)) > maxL &&
+                    getSpacePointToPoint(p, largest_square.toList().get(1)) > maxL &&
+                    getSpacePointToPoint(p, largest_square.toList().get(2)) > maxL &&
+                    getSpacePointToPoint(p, largest_square.toList().get(3)) > maxL)) {
+                newPointList.add(p);
+            }
+        }
+
+        List<double[]> lines = new ArrayList<>();
+        for (int i = 0; i < newPointList.size(); i++) {
+            Point p1 = newPointList.get(i);
+            Point p2 = newPointList.get((i+1) % newPointList.size());
+            if (getSpacePointToPoint(p1, p2) > 2 * maxL) {
+                lines.add(new double[]{p1.x, p1.y, p2.x, p2.y});
+            }
+        }
+
+        List<Point> corners = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            Point corner = computeIntersect(lines.get(i),lines.get((i+1) % lines.size()));
+            corners.add(corner);
+        }
+        return corners;
+    }
