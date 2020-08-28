@@ -1,6 +1,7 @@
 package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
@@ -143,9 +144,11 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
 
     protected void createSettingsPopup(){
         View view = getLayoutInflater().inflate(R.layout.popup_window, null);
-        final PopupWindow window = new PopupWindow(view, 400, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        CardView popup = new CardView(getApplicationContext());
+        popup.addView(view);
+        final PopupWindow window = new PopupWindow(popup, 400, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(android.R.style.Animation_Dialog);
-        window.showAtLocation(view, Gravity.CENTER, 0, 0);
+        window.showAtLocation(popup, Gravity.CENTER, 0, 0);
         Switch flashB = window.getContentView().findViewById(R.id.flashb_popup);
         flashB.setChecked(flash);
         flashB.setOnClickListener(new View.OnClickListener() {

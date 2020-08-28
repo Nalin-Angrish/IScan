@@ -36,7 +36,6 @@ public class ImageProcessor {
         Mat edges = new Mat();
         Imgproc.Canny(blurred, edges, cannyThreshold, cannyThreshold*3);
 
-
         Mat hierarchy = new Mat();
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);

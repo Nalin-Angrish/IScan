@@ -1,7 +1,7 @@
 package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.cardview.widget.CardView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,10 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.graphics.ImageProcessor;
 import com.nalinstudios.iscan.internal.Statics;
 
-import org.opencv.core.Point;
-
 import java.io.File;
-import java.util.List;
 
 @SuppressWarnings("ConstantConditions")
 public class EditViewActivity extends AppCompatActivity implements View.OnClickListener {
@@ -94,7 +91,9 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
     }
 
     protected void Askname(){
-        View popup = getLayoutInflater().inflate(R.layout.popup_enter_name, null);
+        View p = getLayoutInflater().inflate(R.layout.popup_enter_name, null);
+        CardView popup = new CardView(getApplicationContext());
+        popup.addView(p);
         final PopupWindow window = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(android.R.style.Animation_Dialog);
         window.showAtLocation(popup, Gravity.CENTER, 0, 0);
