@@ -1,3 +1,16 @@
 com.nalinstudios.iscan
 com.nalinstudios.iscan.graphics
 com.nalinstudios.iscan.internal
+org.opencv.android
+org.opencv.calib3d
+org.opencv.contrib
+org.opencv.core
+org.opencv.features2d
+org.opencv.gpu
+org.opencv.highgui
+org.opencv.imgproc
+org.opencv.ml
+org.opencv.objdetect
+org.opencv.photo
+org.opencv.utils
+org.opencv.video

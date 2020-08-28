@@ -26,25 +26,47 @@ import com.nalinstudios.iscan.internal.Statics;
 
 import java.io.File;
 
+/**
+ * Activity to handle all the editing functionality.
+ * @author Nalin Angrish.
+ */
 @SuppressWarnings("ConstantConditions")
 public class EditViewActivity extends AppCompatActivity implements View.OnClickListener {
+    /** A FAB to handle submit events. */
     FloatingActionButton finishB;
+    /** Buttons to handle 'next and previous image' commands. (Also handled by the sliding functionality) */
     Button nextB, prevB;
+    /** Button to delete the current image */
     ImageButton  delB;
+    /** Main ImageView to show the current image */
     ImageView imgview;
+    /** The directory containing all the images for this session */
     File dir;
+    /** The index of the image to be displayed */
     int index = 0;
+    /** The minimum distance between the starting and ending points of the swipes by the user to handle 'next and previous image' commands */
     final int MIN_DISTANCE = 100;
+    /** The starting and ending points of the swipes */
     float x1, x2;
 
+    /**
+     * The oncreate function to load the opencv library and initialize the main function.
+     * @param savedInstanceState The state of the saved instance. This state is not used.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_view);
-        System.loadLibrary("opencv_java");
-        main();
+        try {
+            System.loadLibrary("opencv_java");
+            main();
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "OpenCV couldn't be loaded. please try again.", Toast.LENGTH_LONG).show();
+        }
     }
 
+
+    /** The main function of this activity. It is only called when the OpenCV library is successfully loaded. It performs the main functions of the activity */
     protected void main(){
         nextB = findViewById(R.id.nextButton);
         prevB = findViewById(R.id.PreviousButton);
@@ -62,19 +84,13 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         imgview = findViewById(R.id.preview);
         imgview.setImageBitmap(ImageProcessor.getCorners(image));
 
-        /*
-        List<Point> points = ImageProcessor.getCorners(image);
-        for (Point point : points){
-            int length = image.getWidth();
-            int height = image.getHeight();
-            int leftPercent = (int)((point.x/length)*100);
-            int topPercent = (int)((point.y/height)*100);
-            Corner corner = new Corner(leftPercent, topPercent, (ConstraintLayout)findViewById(R.id.cornerLayer), this);
-        }*/
     }
 
 
-
+    /**
+     * This function will delete the current picture being shown.
+     * It will also perform the back/forward button press to show the previous/next picture respectively.
+     */
     protected void deleteCurrentPic(){
         File fileToBeDeleted = dir.listFiles()[index];
         if (fileToBeDeleted.delete()){
@@ -90,6 +106,9 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * This function will ask the user to enter the name of the PDF to be saved.
+     */
     protected void Askname(){
         View p = getLayoutInflater().inflate(R.layout.popup_enter_name, null);
         CardView popup = new CardView(getApplicationContext());
@@ -119,6 +138,11 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+
+    /**
+     * This function will handle all the button pressed and redirect to the one we need to.
+     * @param v the view object of the button.
+     */
     @Override
     public void onClick(View v){
         if (v.equals(nextB)){
@@ -159,6 +183,11 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    /**
+     * A function to handle the next/previous swipes to change the image.
+     * @param event the motionEvent to react upon
+     * @return super.onTouchEvent(event)
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()) {

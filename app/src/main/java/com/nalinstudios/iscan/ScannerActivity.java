@@ -34,17 +34,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-
+/**
+ * This activity is the window where the user will scan the documents.
+ * @author Nalin Angrish.
+ */
 public class ScannerActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener, View.OnClickListener {
 
+    /** The camera variable which will be used to capture pictures*/
     Camera camera;
+    /** The FABs that will be used to handle 'picture clicks', 'submissions', and the creation of 'settings popups'*/
     FloatingActionButton clickB, nextB, settingsB;
+    /** The texture to render the frames captured by the camera*/
     TextureView texture;
+    /** The TextView to show the count of the pictures captured*/
     TextView countView;
+    /** A variable to manage the counts*/
     int count = 0;
+    /** A variable to remember that whether the flash is on or not*/
     boolean flash = true;
+    /** A handler for zooming actions */
     ZoomHandler zoomHandler;
 
+
+    /**
+     * The main method which will show our textures and will administer the window.
+     * @param savedInstanceState The state of the saved instance. This state is not used.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +81,12 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     }
 
 
+    /**
+     * The function to handle the texture rendering and to enable the camera.
+     * @param surface The texture to render the camera on.
+     * @param width The width of the texture.
+     * @param height The height of the texture.
+     */
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         try {
@@ -87,6 +108,10 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         }
     }
 
+    /**
+     * The function to handle the clicks of all the buttons.
+     * @param view the view object of the pressed button.
+     */
     @Override
     public void onClick(View view){
         if (view.equals(clickB)) {
@@ -99,10 +124,11 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         }else if (view.equals(settingsB)){
             createSettingsPopup();
         }
-
-
     }
 
+    /**
+     * A function to handle the click of a picture.
+     */
     protected void click(){
         String dirname = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "");
         final File dir = new File(getFilesDir(), dirname);
@@ -142,6 +168,10 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         });
     }
 
+    /**
+     * A function to create the popup for changing the settings.
+     * (Note that only flash is supported as yet.)
+     */
     protected void createSettingsPopup(){
         View view = getLayoutInflater().inflate(R.layout.popup_window, null);
         CardView popup = new CardView(getApplicationContext());
@@ -176,16 +206,31 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     }
 
 
+    /**
+     * A function to handle the click of the submit button.
+     * This starts the EditViewActivity which can be used to make changes to the pictures.
+     */
     protected void submit(){
         Intent intent = new Intent(ScannerActivity.this, EditViewActivity.class);
         startActivity(intent);
         Log.d("Submitted", getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "Null"));
     }
 
-
+    /**
+     * Blank function.
+     * @param surface The texture to render the camera on.
+     * @param width The width of the texture.
+     * @param height The height of the texture.
+     */
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
 
+
+    /**
+     * A function to release the camera when the texture is destroyed.
+     * @param surface texture to be destroyed
+     * @return true
+     */
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         camera.stopPreview();
@@ -193,9 +238,17 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         return true;
     }
 
+    /**
+     * Blank function.
+     * @param surface texture that renders the camera.
+     */
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
 
+    /**
+     * A function to handle back key presses.
+     * It shows an alert dialog to the user to warn him that the pictures clicked till now will be deleted.
+     */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)

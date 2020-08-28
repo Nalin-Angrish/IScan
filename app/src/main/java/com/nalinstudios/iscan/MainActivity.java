@@ -16,8 +16,16 @@ import android.widget.LinearLayout;
 
 import java.io.File;
 
-
+/**
+ * Main Activity (The name tells you).
+ * It will make the main list of all the PDFs created till now.
+ * @author Nalin Angrish.
+ */
 public class MainActivity extends AppCompatActivity {
+    /**
+     * The on create method of MainActivity.
+     * @param savedInstanceState The state of the saved instance. This state is not used.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +45,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * A function to clear all entries of the PDFs in the main window.
+     */
     protected void clear(){
         LinearLayout main = findViewById(R.id.__main__);
         main.removeAllViews();
     }
 
 
-
-
-
+    /**
+     * This function will create all the CardLayouts for the PDFs.
+     */
     @Override
     protected void onResume() {
         clear();
@@ -64,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * This function will take to the home screen instead of the previous activity if the user has came here after clicking the PDF.
+     */
     @Override
     public void onBackPressed(){
         Intent a = new Intent(Intent.ACTION_MAIN);
