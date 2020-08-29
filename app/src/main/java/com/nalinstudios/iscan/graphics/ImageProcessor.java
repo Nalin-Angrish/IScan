@@ -17,12 +17,21 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Class ImageProcessor to perform operations with teh images like finding corners, cropping, etc.
+ * @author Nalin Angrish.
+ */
 public class ImageProcessor {
 
+    /** A threshold for performing Canny Operations. */
     final private static int cannyThreshold = 25;
 
 
+    /**
+     * A function to return the corners of the image.
+     * @param img the Bitmap object of the image to perform operations
+     * @return It currently returns a Bitmap Object which shows the corners detected but will return a List of corners in future releases.
+     */
     public static Bitmap getCorners(Bitmap img){
         Mat image = new Mat();
         Utils.bitmapToMat(img, image);
@@ -68,12 +77,12 @@ public class ImageProcessor {
     }
 
 
-
-
-
-
-
-
+    /**
+     * This function will crop the image and align to the perspective. As our detection might not be 100% accurate, we will be using this function after the user approves our detection or changes it according to his/her need.
+     * @param image The Bitmap object of the image to crop.
+     * @param corners The list of corners from where to crop the image.
+     * @return The resultant bitmap after cropping.
+     */
     public static Bitmap cropImage(Bitmap image, ArrayList<Point> corners){
         Mat mat = new Mat();
         Utils.bitmapToMat(image, mat);

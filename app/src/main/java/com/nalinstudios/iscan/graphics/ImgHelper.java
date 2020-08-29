@@ -7,23 +7,18 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
 
+/**
+ * A helper class that contains internal functions while processing images using the ImageProcessor Class.
+ * @author Nalin Angrish.
+ */
 class ImgHelper {
-    static Point computeIntersect(double[] a, double[] b) {
-        if (a.length != 4 || b.length != 4)
-            throw new ClassFormatError();
-        double x1 = a[0], y1 = a[1], x2 = a[2], y2 = a[3], x3 = b[0], y3 = b[1], x4 = b[2], y4 = b[3];
-        double d = ((x1 - x2) * (y3 - y4)) - ((y1 - y2) * (x3 - x4));
-        if (d != 0) {
-            Point pt = new Point();
-            pt.x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
-            pt.y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
-            return pt;
-        }
-        else
-            return new Point(-1, -1);
-    }
 
-
+    /**
+     * A function to find the largest figure from the given figures.
+     * Used because most probably the largest Square in the images would be the page of the document to be scanned.
+     * @param squares The list of MatOfPoint objects which are the squares detected by the ImageProcessor class.
+     * @return The index of the largest square from teh given list.
+     */
     static int findLargestSquare(List<MatOfPoint> squares) {
         if (squares.size() == 0)
             return -1;
@@ -44,6 +39,12 @@ class ImgHelper {
     }
 
 
+    /**
+     * A function to get the space between two points.
+     * @param p1 Point 1
+     * @param p2 Point 2
+     * @return The space between the two points.
+     */
     static double getSpacePointToPoint(Point p1, Point p2) {
         double a = p1.x - p2.x;
         double b = p1.y - p2.y;
@@ -51,6 +52,10 @@ class ImgHelper {
     }
 
 
+    /**
+     * A function to sort the corners from a list of points
+     * @param corners The list of points to be sorted.
+     */
     static void sortCorners(List<Point> corners) {
         if (corners.size() == 0) return;
         Point p1 = corners.get(0);
@@ -78,15 +83,6 @@ class ImgHelper {
                 }
             }
         }
-    }
-
-
-    static double angle(Point pt1, Point pt2, Point pt0) {
-        double dx1 = pt1.x - pt0.x;
-        double dy1 = pt1.y - pt0.y;
-        double dx2 = pt2.x - pt0.x;
-        double dy2 = pt2.y - pt0.y;
-        return (dx1*dx2 + dy1*dy2)/Math.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
     }
 
 }
