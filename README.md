@@ -1,5 +1,6 @@
 # IScan
 A scanner App - Made for the Indians, By the Indians
+Official website: [https://nalinstudios.herokuapp.com/IScan](https://nalinstudios.herokuapp.com/IScan)
 
 # Developer Notice:
 The future releases of this app would also require OpenCV (Not included in the repository) and to get it, you
