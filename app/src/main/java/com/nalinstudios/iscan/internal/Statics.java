@@ -23,9 +23,18 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to store all simple functions used by other files in this application.
+ * @author Nalin Angrish.
+ */
 public class Statics {
+    /** The characters which can be used to generate a random string*/
     private final static String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
+    /**
+     * A function to generate a random string
+     * @return A random String
+     */
     public static String randString(){
         StringBuilder builder = new StringBuilder();
         for (int i = 0;i<10;i++){
@@ -35,6 +44,13 @@ public class Statics {
         return builder.toString();
     }
 
+    /**
+     * A function to create a PDF from all the Imaged captured in the current session.
+     * @param app The application object to get the current session.
+     * @param name The name of the PDF to store as.
+     * @throws IOException Thrown if the PDF could not be written and stored.
+     * @throws DocumentException Thrown if the Document could not be created,
+     */
     public static void createPdf(Application app, String name) throws IOException, DocumentException {
         File pdfFolder = new File(Environment.getExternalStorageDirectory(), "IScan");
         if (!pdfFolder.exists()){System.out.println(pdfFolder.mkdir());}
@@ -74,12 +90,21 @@ public class Statics {
         clearData(app);
     }
 
+    /**
+     * A function to get an array of bytes of the image so that the image can be added to the document.
+     * @param image The image to be decoded into byte array.
+     * @return The byte array for the image.
+     */
     private static byte[] toByteArray(Bitmap image){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         return baos.toByteArray();
     }
 
+    /**
+     * A function to clear the data of the current session.
+     * @param app The application object for which the data is to be cleared.
+     */
     public static void clearData(Application app){
         File folder = app.getFilesDir();
         File deletable = new File(folder, app.getSharedPreferences("IScan", Context.MODE_PRIVATE).getString("sessionName", "hello"));
@@ -94,6 +119,11 @@ public class Statics {
         System.out.println(deletable.delete());
     }
 
+    /**
+     * A function to get the first image of the PDF to store it as a thumbnail.
+     * @param app The application object to get the current session.
+     * @return The file object of the first image of the Document.
+     */
     private static File getThumbnail(Application app){
         String folder = app.getSharedPreferences("IScan", Context.MODE_PRIVATE).getString("sessionName", "hello");
         File thumb = new File(app.getFilesDir(), folder).listFiles()[0];
@@ -101,6 +131,12 @@ public class Statics {
         return  thumb;
     }
 
+    /**
+     * A function to copy files from one location to another.
+     * @param src The source location of the file.
+     * @param dst The destination of the file.
+     * @throws IOException Thrown if couldn't write to teh destination.
+     */
     private static void copy(File src, File dst) throws IOException {
         try (InputStream in = new FileInputStream(src)) {
             try (OutputStream out = new FileOutputStream(dst)) {
