@@ -3,5 +3,7 @@
  * The classes in this package are:
  *      ImageProcessor : A class that will be used to perform operations with the images like finding corners, cropping, etc.
  *      ImgHelper : A helper class that contains internal functions while processing images using the ImageProcessor Class.
+ *
+ * @author Nalin Angrish.
  */
 package com.nalinstudios.iscan.graphics;

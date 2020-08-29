@@ -5,5 +5,7 @@
  *      PdfCard : A class to create CardView Layouts for each PDF thumbnail found in the internal data directory.
  *      Statics : A class to store all simple functions used by other files in this application.
  *      ZoomHandler : A class to handle zoom events in the ScannerActivity.
+ *
+ * @author Nalin Angrish.
  */
 package com.nalinstudios.iscan.internal;
