@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class ImageProcessor to perform operations with teh images like finding corners, cropping, etc.
+ * Class ImageProcessor to perform operations with the images like finding corners, cropping, etc.
  * @author Nalin Angrish.
  */
 public class ImageProcessor {

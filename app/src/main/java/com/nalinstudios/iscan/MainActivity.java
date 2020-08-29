@@ -18,7 +18,7 @@ import java.io.File;
 
 /**
  * Main Activity (The name tells you).
- * It will make the main list of all the PDFs created till now.
+ * It will make the main list of all the PDFs created till now and will provide access to the other activities.
  * @author Nalin Angrish.
  */
 public class MainActivity extends AppCompatActivity {
