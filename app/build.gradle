@@ -7,7 +7,7 @@ android {
         applicationId "com.nalinstudios.iscan"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 110
+        versionCode 121
         versionName "1.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
