@@ -1,7 +1,6 @@
 package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -111,11 +110,10 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
      */
     protected void Askname(){
         View p = getLayoutInflater().inflate(R.layout.popup_enter_name, null);
-        CardView popup = new CardView(getApplicationContext());
-        popup.addView(p);
-        final PopupWindow window = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+        final PopupWindow window = new PopupWindow(p, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(android.R.style.Animation_Dialog);
-        window.showAtLocation(popup, Gravity.CENTER, 0, 0);
+        window.showAtLocation(p, Gravity.CENTER, 0, 0);
         window.getContentView().findViewById(R.id.end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
