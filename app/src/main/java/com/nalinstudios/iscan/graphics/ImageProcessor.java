@@ -30,9 +30,9 @@ public class ImageProcessor {
     /**
      * A function to return the corners of the image.
      * @param img the Bitmap object of the image to perform operations
-     * @return It currently returns a Bitmap Object which shows the corners detected but will return a List of corners in future releases.
+     * @return It returns a List of corners found in the image.
      */
-    public static Bitmap getCorners(Bitmap img){
+    public static List<Point> getCorners(Bitmap img){
         Mat image = new Mat();
         Utils.bitmapToMat(img, image);
 
@@ -57,28 +57,29 @@ public class ImageProcessor {
         Point p2 = new Point(rect.x+rect.width, rect.y);
         Point p4 = new Point(rect.x+rect.width, rect.y+rect.height);
         Point p3 = new Point(rect.x, rect.y+rect.height);
-        List<Point> source = new ArrayList<>();
-        source.add(p1);
-        source.add(p2);
-        source.add(p3);
-        source.add(p4);
-        ImgHelper.sortCorners(source);
+        List<Point> corners = new ArrayList<>();
+        corners.add(p1);
+        corners.add(p2);
+        corners.add(p3);
+        corners.add(p4);
+        ImgHelper.sortCorners(corners);
 
-        for (Point p : source){
-            Core.circle(image, p, 50, new Scalar(255,0,0), 30);
-        }
-        Core.line(image, p1, p2, new Scalar(0,255,0), 20);
-        Core.line(image, p2, p4, new Scalar(0,255,0), 20);
-        Core.line(image, p3, p4, new Scalar(0,255,0), 20);
-        Core.line(image, p3, p1, new Scalar(0,255,0), 20);
+        Core.circle(image, p1, 50, new Scalar(255,0,0), 30);    // Used to verify that the markers
+        Core.circle(image, p2, 50, new Scalar(255,0,0), 30);    // are positioned correctly.
+        Core.circle(image, p3, 50, new Scalar(255,0,0), 30);    // No actual role, will be
+        Core.circle(image, p4, 50, new Scalar(255,0,0), 30);    // removed in actual releases
 
         Utils.matToBitmap(image, img);
-        return img;
+        return corners;
     }
 
 
+
+
     /**
-     * This function will crop the image and align to the perspective. As our detection might not be 100% accurate, we will be using this function after the user approves our detection or changes it according to his/her need.
+     * This function will crop the image and align to the perspective.
+     * As our detection might not be 100% accurate, we will be using this
+     * function after the user approves our detection or changes it according to his/her need.
      * @param image The Bitmap object of the image to crop.
      * @param corners The list of corners from where to crop the image.
      * @return The resultant bitmap after cropping.
@@ -126,32 +127,6 @@ public class ImageProcessor {
         Utils.matToBitmap(mat, image);
         return image;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

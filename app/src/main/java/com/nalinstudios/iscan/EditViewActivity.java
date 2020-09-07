@@ -1,13 +1,17 @@
 package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +27,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.graphics.ImageProcessor;
 import com.nalinstudios.iscan.internal.Statics;
 
+import org.opencv.core.Point;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity to handle all the editing functionality.
@@ -60,6 +68,8 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             System.loadLibrary("opencv_java");
             main();
         }catch (Exception e){
+            Log.println(Log.ASSERT, "OPENCV", e.toString());
+            e.printStackTrace();
             Toast.makeText(getApplicationContext(), "OpenCV couldn't be loaded. please try again.", Toast.LENGTH_LONG).show();
         }
     }
@@ -78,11 +88,13 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         String sessionDir = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "hello");
         dir = new File(getFilesDir(), sessionDir);
 
+
         File imageFile = dir.listFiles()[index];
         Bitmap image = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
         imgview = findViewById(R.id.preview);
-        imgview.setImageBitmap(ImageProcessor.getCorners(image));
-
+        List<Point> corners = ImageProcessor.getCorners(image);
+        imgview.setImageBitmap(image);
+        showCorners(corners, image);
     }
 
 
@@ -138,6 +150,46 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
 
 
     /**
+     * A function to arrange the imageViews representing the corners in the position of the detected corners.
+     * @param corners The list of corners.
+     * @param image The image on which to show (It is required to calculate the constraints for the corners
+     */
+    protected void showCorners(List<Point> corners, Bitmap image){
+        List<ImageView> markers = new ArrayList<>();
+        markers.add((ImageView) findViewById(R.id.c1));
+        markers.add((ImageView) findViewById(R.id.c2));
+        markers.add((ImageView) findViewById(R.id.c3));
+        markers.add((ImageView) findViewById(R.id.c4));
+
+        ConstraintLayout cornerLayer = findViewById(R.id.ev_act_main);
+
+        int imgViewHeight, imgViewWidth;
+        imgViewWidth = Resources.getSystem().getDisplayMetrics().widthPixels -20; // as the imageView has its constraints (10 dp on either side)
+        imgViewHeight = (image.getHeight() * imgViewWidth)/image.getWidth(); //some math
+
+        for (int i=0;i<4;i++){
+            Point point = corners.get(i);
+
+            double constraintTop = ((imgViewHeight*point.y)/image.getHeight())+150;   //some math
+            double constraintLeft = ((imgViewWidth*point.x)/image.getWidth());    //some math
+
+            Log.println(Log.ASSERT, "Constraints", constraintLeft+" x "+constraintTop);
+
+            ImageView marker = markers.get(i);
+            ConstraintSet set = new ConstraintSet();
+            set.clone(cornerLayer);
+            set.connect(marker.getId(), ConstraintSet.LEFT, cornerLayer.getId(), ConstraintSet.LEFT, (int)constraintLeft);
+            set.connect(marker.getId(), ConstraintSet.TOP, cornerLayer.getId(), ConstraintSet.TOP, (int)constraintTop);
+            set.applyTo(cornerLayer);
+            cornerLayer.bringChildToFront(marker);
+
+            marker.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+    /**
      * This function will handle all the button pressed and redirect to the one we need to.
      * @param v the view object of the button.
      */
@@ -148,7 +200,9 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             try {
                 File imagefile = dir.listFiles()[index];
                 Bitmap bitmap = BitmapFactory.decodeFile(imagefile.getAbsolutePath());
-                imgview.setImageBitmap(ImageProcessor.getCorners(bitmap));     //TODO: change this line when cropping will be enabled
+                List<Point> corners = ImageProcessor.getCorners(bitmap);
+                showCorners(corners, bitmap);
+                imgview.setImageBitmap(bitmap);
             }catch (Exception e){
                 index=index-1;
                 e.printStackTrace();
@@ -158,7 +212,9 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             try {
                 File imagefile = dir.listFiles()[index];
                 Bitmap bitmap = BitmapFactory.decodeFile(imagefile.getAbsolutePath());
-                imgview.setImageBitmap(ImageProcessor.getCorners(bitmap));      //TODO: change this line when cropping will be enabled
+                List<Point> corners = ImageProcessor.getCorners(bitmap);
+                showCorners(corners, bitmap);
+                imgview.setImageBitmap(bitmap);
             }catch (Exception e){
                 index=index+1;
                 e.printStackTrace();

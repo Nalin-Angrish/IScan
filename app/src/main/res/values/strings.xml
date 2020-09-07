@@ -16,4 +16,5 @@
     <string name="thumbnail">thumbnail</string>
     <string name="share">Share</string>
     <string name="view">View</string>
+    <string name="a_draggable_corner">A draggable corner</string>
 </resources>
