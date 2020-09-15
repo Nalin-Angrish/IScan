@@ -7,63 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".EditViewActivity">
 
-    <ImageView
-        android:id="@+id/preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:contentDescription="@string/title_activity_view_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageView
-        android:id="@+id/c4"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="600dp"
-        android:layout_marginEnd="50dp"
-        android:contentDescription="@string/a_draggable_corner"
-        android:src="@android:drawable/radiobutton_off_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/c3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="600dp"
-        android:contentDescription="@string/a_draggable_corner"
-        android:src="@android:drawable/radiobutton_off_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/c2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="50dp"
-        android:contentDescription="@string/a_draggable_corner"
-        android:src="@android:drawable/radiobutton_off_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/c1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
-        android:contentDescription="@string/a_draggable_corner"
-        android:src="@android:drawable/radiobutton_off_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/nextButton"

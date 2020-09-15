@@ -7,8 +7,8 @@ android {
         applicationId "com.nalinstudios.iscan"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 122
-        versionName "1.2.2"
+        versionCode 130
+        versionName "1.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
@@ -22,13 +22,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    splits{
-        abi{
-            enable true
-            exclude 'arm64-v8a', 'x86_64'
-            include "mips", "armeabi"
-        }
-    }
 }
 
 dependencies {
@@ -40,7 +33,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation project(path: ':libraries:OpenCV')
+    implementation project(path: ':scanlibrary:library')
     implementation ('itext:itext:4.2.1'){
         exclude group: 'jfree', module: 'jfreechart'
     }

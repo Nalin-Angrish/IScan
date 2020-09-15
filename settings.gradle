@@ -1,2 +1,2 @@
-include ':app', ':libraries:OpenCV', ':test'
+include ':app', ':scanlibrary:library'
 rootProject.name='IScan'
