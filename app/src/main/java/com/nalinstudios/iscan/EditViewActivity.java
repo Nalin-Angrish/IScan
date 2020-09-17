@@ -2,25 +2,28 @@ package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.FragmentManager;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
+import com.nalinstudios.iscan.scanlibrary.IScanner;
+import com.nalinstudios.iscan.scanlibrary.Loader;
+import com.nalinstudios.iscan.scanlibrary.ResultFragment;
+import com.nalinstudios.iscan.scanlibrary.ScanConstants;
+
 
 import java.io.File;
 
@@ -32,20 +35,12 @@ import java.io.File;
 public class EditViewActivity extends AppCompatActivity implements View.OnClickListener {
     /** A FAB to handle submit events. */
     FloatingActionButton finishB;
-    /** Buttons to handle 'next and previous image' commands. (Also handled by the sliding functionality) */
-    Button nextB, prevB;
     /** Button to delete the current image */
     ImageButton  delB;
-    /** Main ImageView to show the current image */
-    ImageView imgview;
     /** The directory containing all the images for this session */
     File dir;
     /** The index of the image to be displayed */
     int index = 0;
-    /** The minimum distance between the starting and ending points of the swipes by the user to handle 'next and previous image' commands */
-    final int MIN_DISTANCE = 100;
-    /** The starting and ending points of the swipes */
-    float x1, x2;
 
     /**
      * The oncreate function to load the opencv library and initialize the main function.
@@ -61,22 +56,26 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
 
     /** The main function of this activity. It is only called when the OpenCV library is successfully loaded. It performs the main functions of the activity */
     protected void main(){
-        nextB = findViewById(R.id.nextButton);
-        prevB = findViewById(R.id.PreviousButton);
         delB = findViewById(R.id.deleteButton);
         finishB = findViewById(R.id.finishB);
-        nextB.setOnClickListener(this);
-        prevB.setOnClickListener(this);
         delB.setOnClickListener(this);
         finishB.setOnClickListener(this);
         String sessionDir = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "hello");
         dir = new File(getFilesDir(), sessionDir);
 
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
 
-        File imageFile = dir.listFiles()[index];
-        Bitmap image = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-        imgview = findViewById(R.id.preview);
-        imgview.setImageBitmap(image);
+        for (int i = 0; i < dir.listFiles().length; i++) {
+            File imageFile = dir.listFiles()[i];
+
+            Bundle args = new Bundle();
+            args.putString(ScanConstants.SCANNED_RESULT, imageFile.toURI().toString());
+            ResultFragment result = new ResultFragment();
+            result.setArguments(args);
+            transaction.add(R.id.viewList, result);
+            transaction.commit();
+        }
     }
 
 
@@ -88,12 +87,6 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         File fileToBeDeleted = dir.listFiles()[index];
         if (fileToBeDeleted.delete()){
             Toast.makeText(getApplicationContext(), "Image Successfully Deleted", Toast.LENGTH_LONG).show();
-            if (index==0){
-                nextB.performClick();
-            }else {
-                prevB.performClick();
-            }
-
         }else {
             Toast.makeText(getApplicationContext(), "Image couldn't be deleted", Toast.LENGTH_LONG).show();
         }
@@ -137,27 +130,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
      */
     @Override
     public void onClick(View v){
-        if (v.equals(nextB)){
-            index=index+1;
-            try {
-                File imagefile = dir.listFiles()[index];
-                Bitmap bitmap = BitmapFactory.decodeFile(imagefile.getAbsolutePath());
-                imgview.setImageBitmap(bitmap);
-            }catch (Exception e){
-                index=index-1;
-                e.printStackTrace();
-            }
-        }else if (v.equals(prevB)){
-            index=index-1;
-            try {
-                File imagefile = dir.listFiles()[index];
-                Bitmap bitmap = BitmapFactory.decodeFile(imagefile.getAbsolutePath());
-                imgview.setImageBitmap(bitmap);
-            }catch (Exception e){
-                index=index+1;
-                e.printStackTrace();
-            }
-        }else if (v.equals(delB)){
+        if (v.equals(delB)){
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_delete)
                     .setTitle("Delete?")
@@ -174,31 +147,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
-    /**
-     * A function to handle the next/previous swipes to change the image.
-     * @param event the motionEvent to react upon
-     * @return super.onTouchEvent(event)
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                x1 = event.getX();
-                break;
-            case MotionEvent.ACTION_UP:
-                x2 = event.getX();
-                float deltaX = x2 - x1;
-
-                if (Math.abs(deltaX) > MIN_DISTANCE) {
-                    if (x2 > x1) {
-                        prevB.performClick();
-                    }else {
-                        nextB.performClick();
-                    }
-                }
-                break;
-        }
-        return super.onTouchEvent(event);
+    static {
+        Loader.load();
     }
 }

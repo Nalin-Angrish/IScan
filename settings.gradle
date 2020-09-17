@@ -1,2 +1,2 @@
-include ':app', ':scanlibrary:library'
+include ':app'
 rootProject.name='IScan'

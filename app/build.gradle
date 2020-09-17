@@ -30,11 +30,11 @@ dependencies {
     implementation 'androidx.activity:activity:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation project(path: ':scanlibrary:library')
-    implementation ('itext:itext:4.2.1'){
+    implementation('itext:itext:4.2.1') {
         exclude group: 'jfree', module: 'jfreechart'
     }
 }

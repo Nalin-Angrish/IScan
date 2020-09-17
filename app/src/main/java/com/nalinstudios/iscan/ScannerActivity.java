@@ -114,10 +114,10 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     @Override
     public void onClick(View view){
         if (view.equals(clickB)) {
+            click();
             if (nextB.getVisibility() == View.INVISIBLE) {
                 nextB.show();
             }
-            click();
         }else if (view.equals(nextB)){
             submit();
         }else if (view.equals(settingsB)){
@@ -148,14 +148,14 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
             @Override
             public void onPictureTaken(byte[] data, Camera cam){
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                File mFile = new File(dir, "img"+count+".jpg");
+                File mFile = new File(dir, Statics.randString()+".jpg");
                 try {
                     if (!mFile.exists()) {
                         Log.println(Log.VERBOSE, "IMG", String.valueOf(mFile.createNewFile()));
                     }
                     OutputStream imgStream = new FileOutputStream(mFile);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imgStream);
-                    try {Thread.sleep(700);}catch (InterruptedException e){Log.e("Couldn't wait", e.toString());}
+                    try {Thread.sleep(400);}catch (InterruptedException e){Log.e("Couldn't wait", e.toString());}
                     count = count+1;
                 }catch (IOException e){
                     Toast.makeText(getApplicationContext(), "Couldn't Click picture. Please Try again...", Toast.LENGTH_LONG).show();
