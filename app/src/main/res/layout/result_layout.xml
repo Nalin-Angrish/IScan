@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Org"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
         <Button
             android:id="@+id/magicColor"
@@ -27,7 +27,7 @@
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:text="Magic"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
         <Button
             android:id="@+id/grayMode"
@@ -37,7 +37,7 @@
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:text="Gray"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
         <Button
             android:id="@+id/BWMode"
@@ -47,34 +47,43 @@
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:text="B &amp; W"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 
 
     <FrameLayout
-        android:id="@+id/sourceFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topBar"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/scanPadding"
-        android:layout_marginTop="@dimen/scanPadding"
-        android:layout_marginEnd="@dimen/scanPadding"
-        android:layout_marginBottom="@dimen/scanPadding">
+        android:layout_marginTop="50dp">
 
-        <ImageView
-            android:id="@+id/scannedImage"
+        <FrameLayout
+            android:id="@+id/sourceFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/scanPadding"
-            android:adjustViewBounds="true" />
+            android:layout_marginLeft="@dimen/scanPadding"
+            android:layout_marginTop="@dimen/scanPadding"
+            android:layout_marginRight="@dimen/scanPadding"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/scannedImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center"/>
+        </FrameLayout>
 
         <com.nalinstudios.iscan.scanlibrary.PolygonView
             android:id="@+id/polygonView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/scanPadding"
+            android:layout_marginTop="@dimen/scanPadding"
+            android:layout_marginRight="@dimen/scanPadding">
+        </com.nalinstudios.iscan.scanlibrary.PolygonView>
 
     </FrameLayout>
 

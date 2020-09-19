@@ -8,23 +8,16 @@
     tools:context=".EditViewActivity">
 
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
         <LinearLayout
             android:id="@+id/viewList"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
             android:baselineAligned="false"
-            android:orientation="horizontal"></LinearLayout>
-    </HorizontalScrollView>
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
     <ImageButton
         android:id="@+id/deleteButton"

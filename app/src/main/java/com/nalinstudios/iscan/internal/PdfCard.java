@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -33,12 +32,12 @@ public class PdfCard{
 
     /**
      * The constructor of the class to get all the meta-data of the PDF.
-     * @param con The context of the application.
+     * @param ctx The context of the application.
      * @param file The thumbnail file of hte PDF.
      * @param inflater The LayoutInflater of the activity.
      */
-    public PdfCard(Context con, File file, LayoutInflater inflater){
-        context = con;
+    public PdfCard(Context ctx, File file, LayoutInflater inflater){
+        context = ctx;
         content = inflater.inflate(R.layout.pdf_card, null);
         thumbnail = content.findViewById(R.id.pdfThumbnail);
         title = content.findViewById(R.id.pdfName);
@@ -124,9 +123,7 @@ public class PdfCard{
     private int getWidth(){
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
-        int width = getPercent(screenWidth, 30);
-        Log.println(Log.ASSERT, "width", screenWidth+"-"+width);
-        return width;
+        return getPercent(screenWidth, 30);
     }
 
     /**
@@ -136,9 +133,7 @@ public class PdfCard{
     private int getHeight(){
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenHeight = metrics.heightPixels;
-        int height = getPercent(screenHeight, 20);
-        Log.println(Log.ASSERT, "height", screenHeight+"-"+height);
-        return height;
+        return getPercent(screenHeight, 20);
     }
 
     /**
@@ -148,8 +143,6 @@ public class PdfCard{
      * @return The calculated percentage.
      */
     private int getPercent(int of, int percent){
-        Log.println(Log.ASSERT, "", ""+of);
-        Log.println(Log.ASSERT, "", ""+percent);
         return (of * percent)/100;
     }
 }

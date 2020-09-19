@@ -20,40 +20,59 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by jhansi on 28/03/15.
+ * The View that is used to mark the corners and allow the user to change them.
+ * @author Nalin Angrish, Jhansi.
  */
 public class PolygonView extends FrameLayout {
-
+    /** The context in which the view is made*/
     protected Context context;
+    /** The paint of the lines*/
     private Paint paint;
+    /** The pointers on the corners*/
     private ImageView pointer1;
+    /** The pointers on the corners*/
     private ImageView pointer2;
+    /** The pointers on the corners*/
     private ImageView pointer3;
+    /** The pointers on the corners*/
     private ImageView pointer4;
+
+    /** The pointers between the corners 1&3*/
     private ImageView midPointer13;
+    /** The pointers between the corners 1&2*/
     private ImageView midPointer12;
+    /** The pointers between the corners 3&4*/
     private ImageView midPointer34;
+    /** The pointers between the corners 2&4*/
     private ImageView midPointer24;
+    /** The polygonView object to show*/
     private PolygonView polygonView;
 
+    /**
+     * The Constructor
+     * @param context the context in which the view is made
+     */
     public PolygonView(Context context) {
         super(context);
         this.context = context;
         init();
     }
 
+    /**
+     * The Constructor
+     * @param context the context in which the view is made
+     * @param attrs the attributes of the view.
+     */
     public PolygonView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         init();
     }
 
-    public PolygonView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        this.context = context;
-        init();
-    }
-
+    /**
+     * The main constructor of the view.
+     * It creates the corner pointers, the mid-corner pointers, and other required elements.
+     */
     private void init() {
         polygonView = this;
         pointer1 = getImageView(0, 0);
@@ -83,18 +102,22 @@ public class PolygonView extends FrameLayout {
         initPaint();
     }
 
-    @Override
-    protected void attachViewToParent(View child, int index, ViewGroup.LayoutParams params) {
-        super.attachViewToParent(child, index, params);
-    }
 
+    /**
+     * A function to set the paint colour to the required value (here blue)
+     */
     private void initPaint() {
         paint = new Paint();
-        paint.setColor(Color.parseColor("#0000FF"));
+        paint.setColor(Color.rgb(0,0,255));
         paint.setStrokeWidth(2);
         paint.setAntiAlias(true);
     }
 
+
+    /**
+     * A function to get the points of the corners of the polygonView
+     * @return a List of Integer-Point pairs
+     */
     public Map<Integer, PointF> getPoints() {
 
         List<PointF> points = new ArrayList<PointF>();
@@ -106,6 +129,12 @@ public class PolygonView extends FrameLayout {
         return getOrderedPoints(points);
     }
 
+
+    /**
+     * A function to sort the points
+     * @param points the Points to be ordered
+     * @return a list of Integer-Point pairs
+     */
     public Map<Integer, PointF> getOrderedPoints(List<PointF> points) {
 
         PointF centerPoint = new PointF();
@@ -131,12 +160,22 @@ public class PolygonView extends FrameLayout {
         return orderedPoints;
     }
 
+
+    /**
+     * function to set points on the Image (public candidate)
+     * @param pointFMap list of Integer-Point pairs for all the points to be shown
+     */
     public void setPoints(Map<Integer, PointF> pointFMap) {
         if (pointFMap.size() == 4) {
             setPointsCoordinates(pointFMap);
         }
     }
 
+
+    /**
+     * function to set points on the Image
+     * @param pointFMap list of Integer-Point pairs for all the points to be shown
+     */
     private void setPointsCoordinates(Map<Integer, PointF> pointFMap) {
         pointer1.setX(pointFMap.get(0).x);
         pointer1.setY(pointFMap.get(0).y);
@@ -151,6 +190,11 @@ public class PolygonView extends FrameLayout {
         pointer4.setY(pointFMap.get(3).y);
     }
 
+
+    /**
+     * A function to draw lines from one point to the other and place the mid-corner pointers on the correct place.
+     * @param canvas the canvas to draw on.
+     */
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
@@ -168,6 +212,13 @@ public class PolygonView extends FrameLayout {
         midPointer12.setY(pointer2.getY() - ((pointer2.getY() - pointer1.getY()) / 2));
     }
 
+
+    /**
+     * A function to create an imageView representing a corner at a point
+     * @param x the x position of the point to place the imageView at
+     * @param y the y position of the point to place the imageView at
+     * @return the found ImageView
+     */
     private ImageView getImageView(int x, int y) {
         ImageView imageView = new ImageView(context);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -179,6 +230,22 @@ public class PolygonView extends FrameLayout {
         return imageView;
     }
 
+
+    /**
+     * A function to check whether the shape is valid (i.e., the shape is a quadrilateral and has four corners)
+     * @param pointFMap the list of Integer-Point pair of the corners of the shape
+     * @return is no. of points = 4 ?
+     */
+    public boolean isValidShape(Map<Integer, PointF> pointFMap) {
+        return pointFMap.size() == 4;
+    }
+
+
+
+
+    /**
+     * An OnTouchListener to listen the touches on a mid-corner pointer.
+     */
     private class MidPointTouchListenerImpl implements OnTouchListener {
 
         PointF DownPT = new PointF(); // Record Mouse Position When Pressed Down
@@ -232,9 +299,9 @@ public class PolygonView extends FrameLayout {
                 case MotionEvent.ACTION_UP:
                     int color = 0;
                     if (isValidShape(getPoints())) {
-                        color = Color.parseColor("#0000FF");
+                        color = Color.rgb(0,0,255);
                     } else {
-                        color = Color.parseColor("#00FF00");
+                        color = Color.rgb(255,0,0);
                     }
                     paint.setColor(color);
                     break;
@@ -246,15 +313,10 @@ public class PolygonView extends FrameLayout {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }
 
-    public boolean isValidShape(Map<Integer, PointF> pointFMap) {
-        return pointFMap.size() == 4;
-    }
-
+    /**
+     * An OnTouchListener to listen the touches on a corner pointer.
+     */
     private class TouchListenerImpl implements OnTouchListener {
 
         PointF DownPT = new PointF(); // Record Mouse Position When Pressed Down

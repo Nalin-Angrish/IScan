@@ -1,13 +1,14 @@
 package com.nalinstudios.iscan;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -19,13 +20,13 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
-import com.nalinstudios.iscan.scanlibrary.IScanner;
 import com.nalinstudios.iscan.scanlibrary.Loader;
 import com.nalinstudios.iscan.scanlibrary.ResultFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
 
-
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity to handle all the editing functionality.
@@ -41,6 +42,8 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
     File dir;
     /** The index of the image to be displayed */
     int index = 0;
+    /** A list of all the ResultFragments created...*/
+    List<ResultFragment> fragList = new ArrayList<>();
 
     /**
      * The oncreate function to load the opencv library and initialize the main function.
@@ -54,7 +57,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    /** The main function of this activity. It is only called when the OpenCV library is successfully loaded. It performs the main functions of the activity */
+    /** The main function of this activity. */
     protected void main(){
         delB = findViewById(R.id.deleteButton);
         finishB = findViewById(R.id.finishB);
@@ -75,6 +78,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             result.setArguments(args);
             transaction.add(R.id.viewList, result);
             transaction.commit();
+            fragList.add(result);
         }
     }
 
@@ -107,9 +111,13 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
                 EditText tBox = window.getContentView().findViewById(R.id.pdfName);
                 window.dismiss();
                 try {
+                    for (ResultFragment frag : fragList){
+                        frag.finish();
+                    }
                     Statics.createPdf(getApplication(), tBox.getText().toString());
                     Intent intent = new Intent(EditViewActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
                 }

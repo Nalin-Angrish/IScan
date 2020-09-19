@@ -1,9 +1,9 @@
 package com.nalinstudios.iscan.scanlibrary;
 
 /**
- * Created by sekar on 21/2/18.
+ * A class to load the required native Libraries
+ * @author Nalin Angrish, Sekar.
  */
-
 public class Loader {
     private static boolean done = false;
 
