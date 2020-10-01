@@ -1,4 +1,4 @@
-<h3>Get IScan - The Indian Scanner App</h3>
+<h3>Get IScan - The Indian Scanner App. Made for the Indians, by the Indians</h3>
 <p>
 We prefer and Support Open-Source so if you want to collaborate and improve with us then you can team up with us at <a href="https://github.com/Nalin-2005">GitHub</a>.
 The project's source code is hosted at <a href="https://github.com/Nalin-2005/IScan">https://github.com/Nalin-2005/IScan</a>
