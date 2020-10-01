@@ -80,6 +80,7 @@ public class PolygonView extends FrameLayout {
         pointer3 = getImageView(0, getHeight());
         pointer4 = getImageView(getWidth(), getHeight());
         midPointer13 = getImageView(0, getHeight() / 2);
+
         midPointer13.setOnTouchListener(new MidPointTouchListenerImpl(pointer1, pointer3));
 
         midPointer12 = getImageView(0, getWidth() / 2);
@@ -120,7 +121,7 @@ public class PolygonView extends FrameLayout {
      */
     public Map<Integer, PointF> getPoints() {
 
-        List<PointF> points = new ArrayList<PointF>();
+        List<PointF> points = new ArrayList<>();
         points.add(new PointF(pointer1.getX(), pointer1.getY()));
         points.add(new PointF(pointer2.getX(), pointer2.getY()));
         points.add(new PointF(pointer3.getX(), pointer3.getY()));
@@ -176,6 +177,7 @@ public class PolygonView extends FrameLayout {
      * function to set points on the Image
      * @param pointFMap list of Integer-Point pairs for all the points to be shown
      */
+    @SuppressWarnings("ConstantConditions")
     private void setPointsCoordinates(Map<Integer, PointF> pointFMap) {
         pointer1.setX(pointFMap.get(0).x);
         pointer1.setY(pointFMap.get(0).y);
@@ -198,9 +200,13 @@ public class PolygonView extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
+        //noinspection all
         canvas.drawLine(pointer1.getX() + (pointer1.getWidth() / 2), pointer1.getY() + (pointer1.getHeight() / 2), pointer3.getX() + (pointer3.getWidth() / 2), pointer3.getY() + (pointer3.getHeight() / 2), paint);
+        //noinspection all
         canvas.drawLine(pointer1.getX() + (pointer1.getWidth() / 2), pointer1.getY() + (pointer1.getHeight() / 2), pointer2.getX() + (pointer2.getWidth() / 2), pointer2.getY() + (pointer2.getHeight() / 2), paint);
+        //noinspection all
         canvas.drawLine(pointer2.getX() + (pointer2.getWidth() / 2), pointer2.getY() + (pointer2.getHeight() / 2), pointer4.getX() + (pointer4.getWidth() / 2), pointer4.getY() + (pointer4.getHeight() / 2), paint);
+        //noinspection all
         canvas.drawLine(pointer3.getX() + (pointer3.getWidth() / 2), pointer3.getY() + (pointer3.getHeight() / 2), pointer4.getX() + (pointer4.getWidth() / 2), pointer4.getY() + (pointer4.getHeight() / 2), paint);
         midPointer13.setX(pointer3.getX() - ((pointer3.getX() - pointer1.getX()) / 2));
         midPointer13.setY(pointer3.getY() - ((pointer3.getY() - pointer1.getY()) / 2));
@@ -254,7 +260,7 @@ public class PolygonView extends FrameLayout {
         private ImageView mainPointer1;
         private ImageView mainPointer2;
 
-        public MidPointTouchListenerImpl(ImageView mainPointer1, ImageView mainPointer2) {
+        MidPointTouchListenerImpl(ImageView mainPointer1, ImageView mainPointer2) {
             this.mainPointer1 = mainPointer1;
             this.mainPointer2 = mainPointer2;
         }
@@ -297,7 +303,7 @@ public class PolygonView extends FrameLayout {
                     StartPT = new PointF(v.getX(), v.getY());
                     break;
                 case MotionEvent.ACTION_UP:
-                    int color = 0;
+                    int color;
                     if (isValidShape(getPoints())) {
                         color = Color.rgb(0,0,255);
                     } else {

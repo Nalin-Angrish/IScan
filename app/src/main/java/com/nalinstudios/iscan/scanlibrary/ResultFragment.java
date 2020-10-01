@@ -1,9 +1,7 @@
 package com.nalinstudios.iscan.scanlibrary;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,27 +21,33 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Created by jhansi on 29/03/15.
+ * A customized version of ResultFragment
+ * @author Nalin Angrish, Jhansi.
  */
 public class ResultFragment extends Fragment {
 
+    /** The root view of the fragment*/
     private View view;
+    /** The imageView containing the image to be formatted*/
     private ImageView scannedImageView;
-    private Button doneButton;
+    /** A bitmap to keep in memory the original picture */
     private Bitmap original;
-    private Button originalButton;
-    private Button MagicColorButton;
-    private Button grayModeButton;
-    private Button bwButton;
-    private Button rotanticButton;
-    private Button rotcButton;
+    /** The bitmap that will be shown to the user*/
     private Bitmap transformed;
+    /** The bitmap to keep in memory the original rotation of the image*/
     private Bitmap rotoriginal;
+    /** The Fragment to show loading when any operation is being performed*/
     private static ProgressDialogFragment progressDialogFragment;
 
-    public ResultFragment() {
-    }
 
+
+    /**
+     * A function to create the view and start the main function (the init function)
+     * @param inflater the default LayoutInflator
+     * @param container the default container
+     * @param savedInstanceState the save state of the fragment (not used)
+     * @return the inflated view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.result_layout, null);
@@ -51,18 +55,27 @@ public class ResultFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * The main function of the Fragment
+     */
     private void init() {
-        scannedImageView = (ImageView) view.findViewById(R.id.scannedImage);
-        originalButton = (Button) view.findViewById(R.id.original);
+        Button originalButton;
+        Button MagicColorButton;
+        Button grayModeButton;
+        Button bwButton;
+        Button rotcButton;
+        scannedImageView = view.findViewById(R.id.scannedImage);
+        originalButton = view.findViewById(R.id.original);
         originalButton.setOnClickListener(new OriginalButtonClickListener());
-        MagicColorButton = (Button) view.findViewById(R.id.magicColor);
+        MagicColorButton = view.findViewById(R.id.magicColor);
         MagicColorButton.setOnClickListener(new MagicColorButtonClickListener());
-        grayModeButton = (Button) view.findViewById(R.id.grayMode);
+        grayModeButton = view.findViewById(R.id.grayMode);
         grayModeButton.setOnClickListener(new GrayButtonClickListener());
-        bwButton = (Button) view.findViewById(R.id.BWMode);
+        bwButton = view.findViewById(R.id.BWMode);
         bwButton.setOnClickListener(new BWButtonClickListener());
 
-        rotcButton = (Button) view.findViewById(R.id.rotcButton);
+        rotcButton = view.findViewById(R.id.rotcButton);
         rotcButton.setOnClickListener(new RotButtonClickListener());
 
         Bitmap bitmap = getBitmap();
@@ -73,6 +86,11 @@ public class ResultFragment extends Fragment {
         setScannedImage(bitmap);
     }
 
+
+    /**
+     * Get the bitmap set by the user
+     * @return the Bitmap
+     */
     private Bitmap getBitmap() {
         Uri uri = getUri();
         try {
@@ -85,48 +103,31 @@ public class ResultFragment extends Fragment {
         return null;
     }
 
+
+
+    /**
+     * The URI of the bitmap
+     * @return the URI
+     */
     private Uri getUri() {
-        Uri uri = getArguments().getParcelable(ScanConstants.SCANNED_RESULT);
-        return uri;
+        return getArguments().getParcelable(ScanConstants.SCANNED_RESULT);
     }
 
+
+
+    /**
+     * Tha function to set the image on the view
+     * @param scannedImage the Image to be set
+     */
     public void setScannedImage(Bitmap scannedImage) {
         scannedImageView.setImageBitmap(scannedImage);
     }
 
-    private class DoneButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            showProgressDialog(getResources().getString(R.string.loading));
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Intent data = new Intent();
-                        Bitmap bitmap = transformed;
-                        if (bitmap == null) {
-                            bitmap = original;
-                        }
-                        Uri uri = Utils.getUri(getActivity(), bitmap);
-                        data.putExtra(ScanConstants.SCANNED_RESULT, uri);
-                        getActivity().setResult(Activity.RESULT_OK, data);
-                        original.recycle();
-                        System.gc();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                dismissDialog();
-                                getActivity().finish();
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
 
+
+    /**
+     * A class to transform the image to a Black-&-White image.
+     */
     private class BWButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
@@ -160,6 +161,11 @@ public class ResultFragment extends Fragment {
         }
     }
 
+
+
+    /**
+     * A class to transform the image to a Magic-Color image.
+     */
     private class MagicColorButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
@@ -193,6 +199,10 @@ public class ResultFragment extends Fragment {
         }
     }
 
+
+    /**
+     * A class to transform the image to the original image.
+     */
     private class OriginalButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -209,6 +219,10 @@ public class ResultFragment extends Fragment {
         }
     }
 
+
+    /**
+     * A class to transform the image to a Grayscale image.
+     */
     private class GrayButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
@@ -244,6 +258,9 @@ public class ResultFragment extends Fragment {
 
 
 
+    /**
+     * A class to rotate the image.
+     */
     private class RotButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
@@ -284,6 +301,10 @@ public class ResultFragment extends Fragment {
     }
 
 
+    /**
+     * A function to show the progress dialog.
+     * @param message the message to show.
+     */
     protected synchronized void showProgressDialog(String message) {
         if (progressDialogFragment != null && progressDialogFragment.isVisible()) {
             // Before creating another loading dialog, close all opened loading dialogs (if any)
@@ -295,15 +316,28 @@ public class ResultFragment extends Fragment {
         progressDialogFragment.show(fm, ProgressDialogFragment.class.toString());
     }
 
+
+
+    /**
+     * A function to dismiss the progress dialog.
+     */
     protected synchronized void dismissDialog() {
         progressDialogFragment.dismissAllowingStateLoss();
     }
 
+
+
+    /**
+     * A function to prepare the image for compiling the images into a PDF.
+     */
     public void finish(){
         try {
             File file = new File(Objects.requireNonNull(getArguments().getString(ScanConstants.SCAN_FILE)));
             FileOutputStream stream = new FileOutputStream(file);
             transformed.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            original.recycle();
+            transformed.recycle();
+            rotoriginal.recycle();
         }catch (Exception e){e.printStackTrace();}
     }
 }

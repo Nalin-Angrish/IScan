@@ -17,14 +17,20 @@ import java.util.List;
 
 
 /**
- * An activity that will work as a file browser.
+ * An activity that will work as a file browser to show all the PDFs scanned.
  * Adapted from http://www.christophbrill.de/en/posts/how-to-create-a-android-file-browser-in-15-minutes/
  * @author Nalin Angrish.
  */
 public class ListFileActivity extends ListActivity {
 
+    /** The path to show the files of*/
     private String path;
 
+
+    /**
+     * A function to show the directory contents
+     * @param savedInstanceState the saved instance (not used).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +41,12 @@ public class ListFileActivity extends ListActivity {
         if (getIntent().hasExtra("path")) {
             path = getIntent().getStringExtra("path");
         }
-        setTitle(path);
 
         // Read all files sorted into the values-array
-        List values = new ArrayList();
+        List<String> values = new ArrayList<>();
         File dir = new File(path);
         if (!dir.canRead()) {
-            setTitle(getTitle() + " (inaccessible)");
+            Toast.makeText(this, "Cannot read file contents. Please try again.",Toast.LENGTH_LONG).show();
         }
         String[] list = dir.list();
         if (list != null) {
@@ -54,11 +59,18 @@ public class ListFileActivity extends ListActivity {
         Collections.sort(values);
 
         // Put the data into the list
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1, values);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, android.R.id.text1, values);
         setListAdapter(adapter);
     }
 
+
+    /**
+     * A function to open a pdf / folder represented by the clicked item
+     * @param l the listView
+     * @param v the view clicked
+     * @param position the position of the clicked item
+     * @param id the id of the item.
+     */
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         String filename = (String) getListAdapter().getItem(position);

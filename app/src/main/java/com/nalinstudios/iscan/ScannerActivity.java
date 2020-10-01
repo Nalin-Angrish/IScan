@@ -353,10 +353,6 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      * @return the degrees to rotate the image
      */
     protected int getRotation(){
-        int deg = 0;
-        if (Build.MANUFACTURER.toLowerCase().contains("samsung")){
-            deg = 90;
-        }
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
         return info.orientation;
