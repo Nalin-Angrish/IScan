@@ -7,7 +7,7 @@ android {
         applicationId "com.nalinstudios.iscan"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 130
+        versionCode 140
         versionName "1.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
@@ -20,6 +20,14 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    splits{
+        abi {
+            enable true
+            reset()
+            universalApk false
+            include "arm64-v8a", "armeabi", "armeabi-v7a", "mips", "mips64", "x86", "x86_64"
         }
     }
 }
