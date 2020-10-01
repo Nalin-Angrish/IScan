@@ -28,12 +28,9 @@ main\
 ### Known features that are not present but will be added/fixed:
 1) The PDF is not be created if another PDF with the same name exists.
 2) Scrolling through multiple preview fragments.
-3) The preview at the home page is not sorted correctly (newer should be at top but are not)
-4) It shows a blank but ugly screen when there are no PDFs created
+3) It shows a blank but ugly screen when there are no PDFs created
 
 ### Known bugs:
-1) The PolygonView is not positioned correctly in the FrameLayout.
-2) The image in the PDF card will stretch to maintain resolution but not to preserve ImageView standard ratio.
-3) The app crashes when there are a lot of PDF cards created on the home page.
+1) The image in the PDF card will stretch to maintain resolution but not to preserve ImageView standard ratio.
 
 If you need the documentation for the code of this project you can get it **[here](https://nalin-2005.github.io/IScan)**

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.util.Log;
 
 
 import com.itextpdf.text.Document;
@@ -53,9 +54,9 @@ public class Statics {
      */
     public static void createPdf(Application app, String name) throws IOException, DocumentException {
         File pdfFolder = new File(Environment.getExternalStorageDirectory(), "IScan");
-        if (!pdfFolder.exists()){System.out.println(pdfFolder.mkdir());}
+        if (!pdfFolder.exists()){Log.println(Log.ASSERT, "PDFFOLDER", pdfFolder.mkdir()+"");}
         File pdf = new File(pdfFolder, name+".pdf");
-        if (!pdf.exists()){System.out.println(pdf.createNewFile());}
+        if (!pdf.exists()){Log.println(Log.ASSERT, "PDFFILE", pdfFolder.createNewFile()+"");}
         String sessionName = app.getSharedPreferences("IScan", Context.MODE_PRIVATE).getString("sessionName", "hello");
         File imageFolder = new File(app.getFilesDir(), sessionName);
         List<Bitmap> images = new ArrayList<>();
@@ -68,9 +69,9 @@ public class Statics {
         PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(pdf));
         doc.open();
         Rectangle rect = writer.getPageSize();
-        writer.setMargins(0,0,0,0);
-        float WIDTH = rect.getWidth()-72;
-        float HEIGHT = rect.getHeight()-72;
+        writer.setMargins(-32,0,-32,0);
+        float WIDTH = rect.getWidth()-74;
+        float HEIGHT = rect.getHeight()-74;
         doc.addAuthor("IScan - The Document Scanner");
         for (Bitmap image : images){
             doc.newPage();

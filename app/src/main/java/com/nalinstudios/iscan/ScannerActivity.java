@@ -3,6 +3,8 @@ package com.nalinstudios.iscan;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Fragment;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,8 +12,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -27,11 +32,15 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
 import com.nalinstudios.iscan.internal.ZoomHandler;
+import com.nalinstudios.iscan.scanlibrary.Loader;
+import com.nalinstudios.iscan.scanlibrary.ScanConstants;
+import com.nalinstudios.iscan.scanlibrary.ScanFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 /**
  * This activity is the window where the user will scan the documents.
@@ -53,6 +62,10 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     boolean flash = true;
     /** A handler for zooming actions */
     ZoomHandler zoomHandler;
+    /** A list of Uris of the pictures taken*/
+    ArrayList<Uri> images = new ArrayList<>();
+    /** A reference to the current fragment initialized */
+    Fragment currentFragment;
 
 
     /**
@@ -94,7 +107,6 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
             camera.setDisplayOrientation(90);
             Camera.Parameters params = camera.getParameters();
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            params.setRotation(90);
             if (flash){
                 params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
             }
@@ -137,34 +149,42 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         final File[] files = dir.listFiles();
         assert files != null;
 
-        countView.setText(String.valueOf(files.length+1));
-        camera.takePicture(new Camera.ShutterCallback() {
-            @Override @SuppressWarnings("all")
-            public void onShutter() {
-                Vibrator vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(100);
-            }
-        },null,  new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(byte[] data, Camera cam){
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                File mFile = new File(dir, Statics.randString()+".jpg");
-                try {
-                    if (!mFile.exists()) {
-                        Log.println(Log.VERBOSE, "IMG", String.valueOf(mFile.createNewFile()));
-                    }
-                    OutputStream imgStream = new FileOutputStream(mFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imgStream);
-                    try {Thread.sleep(400);}catch (InterruptedException e){Log.e("Couldn't wait", e.toString());}
-                    count = count+1;
-                }catch (IOException e){
-                    Toast.makeText(getApplicationContext(), "Couldn't Click picture. Please Try again...", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+        try {
+            countView.setText(String.valueOf(files.length + 1));
+            camera.takePicture(new Camera.ShutterCallback() {
+                @Override
+                @SuppressWarnings("all")
+                public void onShutter() {
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(100);
                 }
-
-                camera.startPreview();
-            }
-        });
+            }, null, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera cam) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    bitmap = rotateImage(bitmap);
+                    File mFile = new File(dir, Statics.randString() + ".jpg");
+                    try {
+                        if (!mFile.exists()) {
+                            Log.println(Log.VERBOSE, "IMG", String.valueOf(mFile.createNewFile()));
+                        }
+                        OutputStream imgStream = new FileOutputStream(mFile);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imgStream);
+                        try {
+                            Thread.sleep(400);
+                        } catch (InterruptedException e) {
+                            Log.e("Couldn't wait", e.toString());
+                        }
+                        count = count + 1;
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "Couldn't Click picture. Please Try again...", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                    startScan(mFile);
+                    camera.startPreview();
+                }
+            });
+        }catch (Exception e){e.printStackTrace();}
     }
 
     /**
@@ -209,6 +229,9 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      */
     protected void submit(){
         Intent intent = new Intent(ScannerActivity.this, EditViewActivity.class);
+        Bundle b = new Bundle();
+        b.putParcelableArrayList("content", images);
+        intent.putExtras(b);
         startActivity(intent);
         Log.d("Submitted", getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "Null"));
     }
@@ -224,14 +247,12 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
 
 
     /**
-     * A function to release the camera when the texture is destroyed.
-     * @param surface texture to be destroyed
+     * Blank function
+     * @param surface The texture to render the camera on.
      * @return true
      */
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        camera.stopPreview();
-        camera.release();
         return true;
     }
 
@@ -248,6 +269,11 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      */
     @Override
     public void onBackPressed() {
+        if (currentFragment != null){
+            ((ScanFragment)currentFragment).scanButton.performClick();
+            Toast.makeText(this, "The Image has been cropped and saved but if needed, you can delete it later.", Toast.LENGTH_LONG).show();
+            return;
+        }
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Closing Activity")
@@ -265,4 +291,74 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                 .show();
     }
 
+
+    /**
+     * A function to get notified when the corners are selected and the final image after cropping is available
+     */
+    public void onScanFinish(){
+        getFragmentManager().beginTransaction().remove(currentFragment).commit();
+        currentFragment = null;
+    }
+
+    /**
+     * A function to create the window to crop the image
+     * @param m the image file
+     */
+    public void startScan(File m){
+        ScanFragment frag = new ScanFragment();
+        Bundle b = new Bundle();
+        b.putParcelable(ScanConstants.SELECTED_BITMAP, Uri.fromFile(m));
+        b.putString(ScanConstants.SCAN_FILE, m.getAbsolutePath());
+        frag.setArguments(b);
+        getFragmentManager().beginTransaction().add(R.id.__main__, frag).commit();
+        currentFragment = frag;
+    }
+
+
+    /**
+     * A function to release the camera when activity is finished
+     */
+    @Override
+    public void finish() {
+        super.finish();
+        camera.stopPreview();
+        camera.release();
+    }
+
+
+    static {
+        Loader.load();
+    }
+
+    /**
+     * A function to rotate the image according to the camera orientation
+     * @param bmp the bitmap to be rotated
+     * @return the rotated bitmap
+     */
+    protected Bitmap rotateImage(Bitmap bmp){
+        int deg = getRotation();
+        if (deg == 0){
+            //As the image does not need to be rotated.
+            return bmp;
+        }
+        Matrix matrix = new Matrix();
+        matrix.postRotate(deg);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, bmp.getWidth(), bmp.getHeight(), true);
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+    }
+
+
+    /**
+     * A function to get the camera's rotation based on the manufacturer as different manufacturers assemble cameras with different orientation
+     * @return the degrees to rotate the image
+     */
+    protected int getRotation(){
+        int deg = 0;
+        if (Build.MANUFACTURER.toLowerCase().contains("samsung")){
+            deg = 90;
+        }
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
+        return info.orientation;
+    }
 }

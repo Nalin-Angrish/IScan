@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,42 +12,51 @@
 
         <Button
             android:id="@+id/original"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Org"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/magicColor"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:text="Magic"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/grayMode"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:text="Gray"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/BWMode"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:text="B &amp; W"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/rotcButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:drawable/ic_menu_rotate"
+            android:singleLine="true"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
@@ -55,36 +64,19 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp">
+        android:layout_below="@id/topBar"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/scanPadding"
+        android:layout_marginTop="@dimen/scanPadding"
+        android:layout_marginEnd="@dimen/scanPadding"
+        android:layout_marginBottom="@dimen/scanPadding">
 
-        <FrameLayout
-            android:id="@+id/sourceFrame"
+        <ImageView
+            android:id="@+id/scannedImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/scanPadding"
-            android:layout_marginTop="@dimen/scanPadding"
-            android:layout_marginRight="@dimen/scanPadding"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/scannedImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:layout_gravity="center"/>
-        </FrameLayout>
-
-        <com.nalinstudios.iscan.scanlibrary.PolygonView
-            android:id="@+id/polygonView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/scanPadding"
-            android:layout_marginTop="@dimen/scanPadding"
-            android:layout_marginRight="@dimen/scanPadding">
-        </com.nalinstudios.iscan.scanlibrary.PolygonView>
-
+            android:layout_margin="@dimen/scanPadding" />
     </FrameLayout>
 
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -13,7 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 
 import com.nalinstudios.iscan.R;
 
@@ -29,6 +30,7 @@ public class PdfCard{
     private TextView title;
     private ImageButton view, share;
     private Context context;
+    private AppCompatActivity activity;
 
     /**
      * The constructor of the class to get all the meta-data of the PDF.
@@ -36,8 +38,9 @@ public class PdfCard{
      * @param file The thumbnail file of hte PDF.
      * @param inflater The LayoutInflater of the activity.
      */
-    public PdfCard(Context ctx, File file, LayoutInflater inflater){
+    public PdfCard(Context ctx, File file, LayoutInflater inflater, AppCompatActivity activity){
         context = ctx;
+        this.activity = activity;
         content = inflater.inflate(R.layout.pdf_card, null);
         thumbnail = content.findViewById(R.id.pdfThumbnail);
         title = content.findViewById(R.id.pdfName);
@@ -51,11 +54,12 @@ public class PdfCard{
      * @return The cardView of the PDF with all the buttons.
      */
     public View getCard(){
-        CardView card = new CardView(context);
+        CardView card = new CardView(activity.getApplicationContext());
         card.addView(content);
         int color = Color.rgb(255,255,255);
         card.setCardBackgroundColor(color);
         card.setRadius(10);
+        card.setUseCompatPadding(true);
         return card;
     }
 
@@ -69,7 +73,9 @@ public class PdfCard{
         int WIDTH = getWidth();
         thumbnail.getLayoutParams().height = HEIGHT;
         thumbnail.getLayoutParams().width = WIDTH;
-        thumbnail.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 3;
+        thumbnail.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath(),options));
         try {
             title.setText(file.getName().replace(".jpg", ""));
         }catch (Exception e){
@@ -80,9 +86,10 @@ public class PdfCard{
             public void onClick(View v) {
                 File viewAble = getFile(file);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.fromFile(viewAble), "application/pdf");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                intent.setDataAndType(FileProvider.getUriForFile(activity.getApplicationContext(), activity.getPackageName()+ ".provider", viewAble), "application/pdf");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                activity.startActivity(Intent.createChooser(intent, "Open Using"));
             }
         });
         share.setOnClickListener(new View.OnClickListener() {
@@ -90,10 +97,11 @@ public class PdfCard{
             public void onClick(View v) {
                 File shareAble = getFile(file);
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(shareAble));
+                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(activity.getApplicationContext(), activity.getPackageName()+ ".provider", shareAble));
                 intent.setType("application/pdf");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                activity.startActivity(Intent.createChooser(intent, "Share Using"));
             }
         });
 

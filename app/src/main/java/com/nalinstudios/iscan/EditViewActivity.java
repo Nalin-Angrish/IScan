@@ -1,26 +1,21 @@
 package com.nalinstudios.iscan;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
-import com.nalinstudios.iscan.scanlibrary.Loader;
 import com.nalinstudios.iscan.scanlibrary.ResultFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
 
@@ -36,12 +31,8 @@ import java.util.List;
 public class EditViewActivity extends AppCompatActivity implements View.OnClickListener {
     /** A FAB to handle submit events. */
     FloatingActionButton finishB;
-    /** Button to delete the current image */
-    ImageButton  delB;
     /** The directory containing all the images for this session */
     File dir;
-    /** The index of the image to be displayed */
-    int index = 0;
     /** A list of all the ResultFragments created...*/
     List<ResultFragment> fragList = new ArrayList<>();
 
@@ -59,9 +50,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
 
     /** The main function of this activity. */
     protected void main(){
-        delB = findViewById(R.id.deleteButton);
         finishB = findViewById(R.id.finishB);
-        delB.setOnClickListener(this);
         finishB.setOnClickListener(this);
         String sessionDir = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "hello");
         dir = new File(getFilesDir(), sessionDir);
@@ -73,28 +62,16 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             File imageFile = dir.listFiles()[i];
 
             Bundle args = new Bundle();
-            args.putString(ScanConstants.SCANNED_RESULT, imageFile.toURI().toString());
+            args.putParcelable(ScanConstants.SCANNED_RESULT, Uri.fromFile(imageFile));
+            args.putString(ScanConstants.SCAN_FILE, imageFile.getAbsolutePath());
             ResultFragment result = new ResultFragment();
             result.setArguments(args);
             transaction.add(R.id.viewList, result);
-            transaction.commit();
             fragList.add(result);
         }
+        transaction.commit();
     }
 
-
-    /**
-     * This function will delete the current picture being shown.
-     * It will also perform the back/forward button press to show the previous/next picture respectively.
-     */
-    protected void deleteCurrentPic(){
-        File fileToBeDeleted = dir.listFiles()[index];
-        if (fileToBeDeleted.delete()){
-            Toast.makeText(getApplicationContext(), "Image Successfully Deleted", Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(getApplicationContext(), "Image couldn't be deleted", Toast.LENGTH_LONG).show();
-        }
-    }
 
     /**
      * This function will ask the user to enter the name of the PDF to be saved.
@@ -120,6 +97,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
                     finish();
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
             }
         });
@@ -137,7 +115,7 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
      * @param v the view object of the button.
      */
     @Override
-    public void onClick(View v){
+    public void onClick(View v){/*
         if (v.equals(delB)){
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_delete)
@@ -149,13 +127,10 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
                             deleteCurrentPic();
                         }
                     })
-                    .setNegativeButton("Don't Delete", null).show();
-        }else if (v.equals(finishB)){
+                    .setNegativeButton("Don't Delete", null);//.show();
+        }else */if (v.equals(finishB)){
             Askname();
         }
     }
 
-    static {
-        Loader.load();
-    }
 }
