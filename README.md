@@ -26,9 +26,8 @@ main\
 ~~~
 
 ### Known features that are not present but will be added/fixed:
-1) The PDF is not be created if another PDF with the same name exists.
-2) Scrolling through multiple preview fragments.
-3) It shows a blank but ugly screen when there are no PDFs created
+1) Scrolling through multiple preview fragments.
+2) It shows a blank but ugly screen when there are no PDFs created
 
 ### Known bugs:
 1) The image in the PDF card will stretch to maintain resolution but not to preserve ImageView standard ratio.

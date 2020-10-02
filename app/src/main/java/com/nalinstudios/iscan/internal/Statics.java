@@ -151,4 +151,19 @@ public class Statics {
     }
 
 
+    /**
+     * A function to check whether a PDF has already been created with the same name or not.
+     * @param name the name to check of existence of
+     * @return whether or not the name is available (true/false)
+     */
+    public static boolean isAvailable(String name){
+        File folder = new File(Environment.getExternalStorageDirectory(), "IScan");
+        String [] files = folder.list();
+        for (String file: files){
+            if (file.toLowerCase().equals(name.toLowerCase() + ".pdf")){
+                return false;
+            }
+        }
+        return true;
+    }
 }

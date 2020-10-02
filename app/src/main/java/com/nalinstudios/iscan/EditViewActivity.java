@@ -88,13 +88,17 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
                 EditText tBox = window.getContentView().findViewById(R.id.pdfName);
                 window.dismiss();
                 try {
-                    for (ResultFragment frag : fragList){
-                        frag.finish();
+                    if (Statics.isAvailable(tBox.getText().toString())) {
+                        for (ResultFragment frag : fragList) {
+                            frag.finish();
+                        }
+                        Statics.createPdf(getApplication(), tBox.getText().toString());
+                        Intent intent = new Intent(EditViewActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "A PDF with this name already exists. Please try again with a different name.", Toast.LENGTH_LONG).show();
                     }
-                    Statics.createPdf(getApplication(), tBox.getText().toString());
-                    Intent intent = new Intent(EditViewActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
