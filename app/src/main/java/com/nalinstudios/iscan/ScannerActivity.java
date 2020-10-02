@@ -193,7 +193,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      */
     protected void createSettingsPopup(){
         View popup = getLayoutInflater().inflate(R.layout.popup_window, null);
-        final PopupWindow window = new PopupWindow(popup, 400, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        final PopupWindow window = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(android.R.style.Animation_Dialog);
         window.showAtLocation(popup, Gravity.CENTER, 0, 0);
         Switch flashB = window.getContentView().findViewById(R.id.flashb_popup);
