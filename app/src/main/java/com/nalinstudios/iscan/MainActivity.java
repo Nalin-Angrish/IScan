@@ -1,6 +1,7 @@
 package com.nalinstudios.iscan;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import androidx.core.content.PermissionChecker;
 
 import android.os.Environment;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -70,6 +72,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         clear();
+
+        File mainf = new File(Environment.getExternalStorageDirectory(), "IScan");
+        if (!mainf.exists()){
+            // noinspection all
+            mainf.mkdir();
+        }
+        File data = new File(mainf, ".data-internal");
+        if (!data.exists()){
+            // noinspection all
+            data.mkdir();
+        }
+
+
         getApplicationContext().getSharedPreferences("IScan", MODE_PRIVATE).edit().putString("sessionName", Statics.randString()).apply();
         File[] folder = new File(new File(Environment.getExternalStorageDirectory(), "IScan"), ".data-internal").listFiles();
         assert folder != null;
@@ -77,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
         int stdlimit = 10; // this limit is the number of cards that will be shown. Keep this as low so it does not lag the device (low end devices may lag)
                 //But keep it high enough that the user does not get frustrated by asking to open another app (the file explorer)
         int limit;
+        if(folder.length == 0){ // That means there are no PDFs scanned
+            getLayoutInflater().inflate(R.layout.noscan, (LinearLayout)findViewById(R.id.__main__));
+            ImageView img = findViewById(R.id.noscanimg);
+            img.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_foreground));
+            super.onResume();
+            return;
+        }
         if (folder.length < stdlimit){
             limit = folder.length;
         }else {
