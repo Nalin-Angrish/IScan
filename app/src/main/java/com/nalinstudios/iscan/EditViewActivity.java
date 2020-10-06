@@ -1,20 +1,25 @@
 package com.nalinstudios.iscan;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nalinstudios.iscan.internal.LockedHScrollView;
 import com.nalinstudios.iscan.internal.Statics;
 import com.nalinstudios.iscan.scanlibrary.ResultFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
@@ -28,13 +33,15 @@ import java.util.List;
  * @author Nalin Angrish.
  */
 @SuppressWarnings("ConstantConditions")
-public class EditViewActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditViewActivity extends FragmentActivity implements View.OnClickListener {
     /** A FAB to handle submit events. */
     FloatingActionButton finishB;
     /** The directory containing all the images for this session */
     File dir;
     /** A list of all the ResultFragments created...*/
     List<ResultFragment> fragList = new ArrayList<>();
+
+
 
     /**
      * The oncreate function to load the opencv library and initialize the main function.
@@ -56,20 +63,30 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
         dir = new File(getFilesDir(), sessionDir);
 
         FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
 
         for (int i = 0; i < dir.listFiles().length; i++) {
-            File imageFile = dir.listFiles()[i];
+            FragmentTransaction transaction = manager.beginTransaction();
 
+            File imageFile = dir.listFiles()[i];
             Bundle args = new Bundle();
             args.putParcelable(ScanConstants.SCANNED_RESULT, Uri.fromFile(imageFile));
             args.putString(ScanConstants.SCAN_FILE, imageFile.getAbsolutePath());
             ResultFragment result = new ResultFragment();
             result.setArguments(args);
-            transaction.add(R.id.viewList, result);
+
+
+            LinearLayout l = new LinearLayout(this);
+            l.setId(View.generateViewId());
+            transaction.add(l.getId(), result, "result-"+i);
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, LinearLayout.LayoutParams.MATCH_PARENT);
+            l.setLayoutParams(param);
+            ((LinearLayout)findViewById(R.id.viewList)).addView(l,i);
+            findViewById(R.id.viewList).invalidate();
             fragList.add(result);
+            transaction.commit();
+
         }
-        transaction.commit();
+        Log.println(Log.ASSERT, "count", ((LinearLayout)findViewById(R.id.viewList)).getChildCount()+"");
     }
 
 
@@ -136,5 +153,4 @@ public class EditViewActivity extends AppCompatActivity implements View.OnClickL
             Askname();
         }
     }
-
 }

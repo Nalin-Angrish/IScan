@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 
 import com.nalinstudios.iscan.R;
@@ -94,8 +95,12 @@ public class ResultFragment extends Fragment {
     private Bitmap getBitmap() {
         Uri uri = getUri();
         try {
-            original = Utils.getBitmap(getActivity(), uri);
-            //getActivity().getContentResolver().delete(uri, null, null);
+            Bitmap bmp = Utils.getBitmap(getActivity(), uri);
+            float width = getResources().getDisplayMetrics().widthPixels;
+            float rat = width/bmp.getWidth();
+            float height = rat*bmp.getHeight();
+            original = Bitmap.createScaledBitmap(bmp,(int)width,(int)height,true);
+            bmp.recycle();
             return original;
         } catch (IOException e) {
             e.printStackTrace();

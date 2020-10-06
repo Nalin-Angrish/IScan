@@ -25,9 +25,6 @@ main\
     +- AndroidManifest.xml
 ~~~
 
-### Known features that are not present but will be added/fixed:
-1) Scrolling through multiple preview fragments.
-
 ### Known bugs:
 1) The image in the PDF card will stretch to maintain resolution but not to preserve ImageView standard ratio.
 

@@ -8,15 +8,22 @@
     tools:context=".EditViewActivity">
 
 
-    <LinearLayout
-        android:id="@+id/viewList"
-        android:layout_width="wrap_content"
+    <com.nalinstudios.iscan.internal.LockedHScrollView
+        android:id="@+id/scrollzone"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/viewList"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:orientation="horizontal"></LinearLayout>
+    </com.nalinstudios.iscan.internal.LockedHScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/finishB"
