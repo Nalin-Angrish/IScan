@@ -25,7 +25,4 @@ main\
     +- AndroidManifest.xml
 ~~~
 
-### Known bugs:
-1) The image in the PDF card will stretch to maintain resolution but not to preserve ImageView standard ratio.
-
 If you need the documentation for the code of this project you can get it **[here](https://nalin-2005.github.io/IScan)**

@@ -2,6 +2,7 @@ package com.nalinstudios.iscan.internal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Environment;
@@ -71,11 +72,9 @@ public class PdfCard{
     private void init(final File file){
         int HEIGHT = getHeight();
         int WIDTH = getWidth();
-        thumbnail.getLayoutParams().height = HEIGHT;
-        thumbnail.getLayoutParams().width = WIDTH;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 3;
-        thumbnail.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath(),options));
+        thumbnail.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(file.getAbsolutePath(),options),WIDTH, HEIGHT, true));
         try {
             title.setText(file.getName().replace(".jpg", ""));
         }catch (Exception e){
