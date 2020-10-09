@@ -1,6 +1,5 @@
 package com.nalinstudios.iscan;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.FragmentManager;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -19,7 +17,6 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.nalinstudios.iscan.internal.LockedHScrollView;
 import com.nalinstudios.iscan.internal.Statics;
 import com.nalinstudios.iscan.scanlibrary.ResultFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
@@ -152,5 +149,12 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
         }else */if (v.equals(finishB)){
             Askname();
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

@@ -9,8 +9,10 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,7 @@ public class PdfCard{
     private ImageButton view, share;
     private Context context;
     private AppCompatActivity activity;
+    private File file;
 
     /**
      * The constructor of the class to get all the meta-data of the PDF.
@@ -47,7 +50,8 @@ public class PdfCard{
         title = content.findViewById(R.id.pdfName);
         view = content.findViewById(R.id.view);
         share = content.findViewById(R.id.share);
-        init(file);
+        this.file = file;
+        init();
     }
 
     /**
@@ -67,19 +71,19 @@ public class PdfCard{
 
     /**
      * The main initialization function of the PdfCard.
-     * @param file The image file of the thumbnail.
      */
-    private void init(final File file){
+    private void init(){
         int HEIGHT = getHeight();
         int WIDTH = getWidth();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 3;
         thumbnail.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(file.getAbsolutePath(),options),WIDTH, HEIGHT, true));
-        try {
-            title.setText(file.getName().replace(".jpg", ""));
-        }catch (Exception e){
-            title.setText(file.getName());
-        }
+        setTitle();
+        LinearLayout l = content.findViewById(R.id.data);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(getPercent(context.getResources().getDisplayMetrics().widthPixels,50), ViewGroup.LayoutParams.MATCH_PARENT);
+        params.topMargin = 20;
+        params.bottomMargin = 20;
+        l.setLayoutParams(params);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,5 +155,30 @@ public class PdfCard{
      */
     private int getPercent(int of, int percent){
         return (of * percent)/100;
+    }
+
+
+
+    /**
+     * A function to set the title. This function is kept separate so that
+     * if the name is too long, it can be shortened and for that manipulation
+     * a separate block of code is made.
+     */
+    private void setTitle(){
+        File file = this.file;
+        String name;
+        try {
+            name = file.getName().replace(".jpg","");
+        }catch (Exception e){
+            name = file.getName();
+        }
+        if (name.length() > 15){
+            StringBuilder sb = new StringBuilder();
+            for (int i=0;i<15;i++){
+                sb.append(name.charAt(i));
+            }
+            name = sb.toString() + "...";
+        }
+        title.setText(name);
     }
 }

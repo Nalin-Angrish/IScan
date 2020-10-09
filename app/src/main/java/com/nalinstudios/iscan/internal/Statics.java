@@ -11,6 +11,7 @@ import android.util.Log;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -65,21 +66,28 @@ public class Statics {
             images.add(BitmapFactory.decodeFile(eachFile.getAbsolutePath()));
         }
 
-        Document doc = new Document();
+        Document doc = new Document(PageSize.A4,0,0,0,0);
         PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(pdf));
         doc.open();
-        Rectangle rect = writer.getPageSize();
-        writer.setMargins(-32,0,-32,0);
-        float WIDTH = rect.getWidth()-74;
-        float HEIGHT = rect.getHeight()-74;
         doc.addAuthor("IScan - The Document Scanner");
         for (Bitmap image : images){
+            float pw = PageSize.A4.getWidth();
+            float iw = image.getWidth();
+            float ih = image.getHeight();
+            float rat = pw/iw;
+            float ph = rat*ih;
+            Bitmap page = Bitmap.createScaledBitmap(image,(int)pw,(int)ph,true);    // scale the bitmap so that the page width is standard (of an A4 size)
+
+            doc.setPageSize(new Rectangle(page.getWidth(), page.getHeight()));
             doc.newPage();
-            Bitmap page = Bitmap.createScaledBitmap(image, (int)WIDTH, (int)HEIGHT, false);
             Image img = Image.getInstance(toByteArray(page));
             doc.add(img);
         }
+
+
         doc.close();
+        writer.flush();
+        writer.close();
         File thumbnailFile = getThumbnail(app);
         File dataStorage = new File(pdfFolder, ".data-internal");
         if (!dataStorage.exists()){System.out.println(dataStorage.mkdir());}
@@ -96,7 +104,7 @@ public class Statics {
      * @param image The image to be decoded into byte array.
      * @return The byte array for the image.
      */
-    private static byte[] toByteArray(Bitmap image){
+    public static byte[] toByteArray(Bitmap image){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         return baos.toByteArray();

@@ -36,7 +36,7 @@ import java.util.Objects;
  * A customized version of ScanFragment
  * @author Nalin Angrish, Jhansi.
  */
-public class ScanFragment extends Fragment {
+public class ScanFragment extends Fragment{
 
     /** A button to approve the corners selected by the user */
     public Button scanButton;
@@ -81,27 +81,20 @@ public class ScanFragment extends Fragment {
         sourceFrame.post(new Runnable() {
             @Override
             public void run() {
-                original = getBitmap();
-                if (original != null) {
-                    setBitmap(original);
-                }
+                getBitmap();
             }
         });
     }
 
 
     /**
-     * Get the bitmap set by the user
-     * @return the Bitmap
+     * Get the bitmap asynchronously set by the user
      */
-    private Bitmap getBitmap() {
+    private void getBitmap() {
         Uri uri = getUri();
-        try {
-            return Utils.getBitmap(getActivity(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        try{
+            onReceiveBitmap(Utils.getBitmap(getActivity(), uri));
+        }catch (IOException e){e.printStackTrace();}
     }
 
 
@@ -351,4 +344,14 @@ public class ScanFragment extends Fragment {
         progressDialogFragment.dismissAllowingStateLoss();
     }
 
+    /**
+     * A function to receive the requested bitmap
+     * @param bitmap the requested bitmap
+     */
+    public void onReceiveBitmap(Bitmap bitmap){
+        original = bitmap;
+        if (original != null) {
+            setBitmap(original);
+        }
+    }
 }

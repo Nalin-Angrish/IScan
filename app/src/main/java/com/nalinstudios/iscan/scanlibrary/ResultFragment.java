@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 
 import com.nalinstudios.iscan.R;
@@ -25,7 +24,7 @@ import java.util.Objects;
  * A customized version of ResultFragment
  * @author Nalin Angrish, Jhansi.
  */
-public class ResultFragment extends Fragment {
+public class ResultFragment extends Fragment{
 
     /** The root view of the fragment*/
     private View view;
@@ -79,33 +78,18 @@ public class ResultFragment extends Fragment {
         rotcButton = view.findViewById(R.id.rotcButton);
         rotcButton.setOnClickListener(new RotButtonClickListener());
 
-        Bitmap bitmap = getBitmap();
-        transformed = bitmap;
-        rotoriginal = bitmap;
-
-        //Bitmap bitmap = getBitmap();
-        setScannedImage(bitmap);
+        getBitmap();
     }
 
 
     /**
-     * Get the bitmap set by the user
-     * @return the Bitmap
+     * Get the bitmap set by the user asynchronously
      */
-    private Bitmap getBitmap() {
+    private void getBitmap() {
         Uri uri = getUri();
-        try {
-            Bitmap bmp = Utils.getBitmap(getActivity(), uri);
-            float width = getResources().getDisplayMetrics().widthPixels;
-            float rat = width/bmp.getWidth();
-            float height = rat*bmp.getHeight();
-            original = Bitmap.createScaledBitmap(bmp,(int)width,(int)height,true);
-            bmp.recycle();
-            return original;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        try{
+            onReceiveBitmap(Utils.getBitmap(getActivity(), uri));
+        }catch (IOException e){e.printStackTrace();}
     }
 
 
@@ -344,5 +328,16 @@ public class ResultFragment extends Fragment {
             transformed.recycle();
             rotoriginal.recycle();
         }catch (Exception e){e.printStackTrace();}
+    }
+
+    /**
+     * A function to receive the requested bitmap
+     * @param bitmap the requested bitmap
+     */
+    public void onReceiveBitmap(Bitmap bitmap){
+        original = bitmap;
+        transformed = bitmap;
+        rotoriginal = bitmap;
+        setScannedImage(bitmap);
     }
 }

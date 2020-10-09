@@ -16,7 +16,6 @@ import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -283,6 +282,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Statics.clearData(getApplication());
+                        startActivity(new Intent(ScannerActivity.this, MainActivity.class));
                         finish();
                     }
 
