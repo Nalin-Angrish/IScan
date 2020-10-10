@@ -81,6 +81,8 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        flash = getSharedPreferences("IScan",MODE_PRIVATE).getBoolean("flash",true);
+
         texture = findViewById(R.id.camView);
         texture.setSurfaceTextureListener(this);
         int height = Resources.getSystem().getDisplayMetrics().heightPixels - 350;
@@ -217,6 +219,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                     camera.setParameters(parameters);
                 }
+                getSharedPreferences("IScan", MODE_PRIVATE).edit().putBoolean("flash", flash).apply();
             }
         });
 
