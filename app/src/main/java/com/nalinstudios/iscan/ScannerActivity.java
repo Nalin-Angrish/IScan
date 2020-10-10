@@ -2,6 +2,7 @@ package com.nalinstudios.iscan;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.exifinterface.media.ExifInterface;
 
 import android.app.Fragment;
 
@@ -34,8 +35,10 @@ import com.nalinstudios.iscan.internal.ZoomHandler;
 import com.nalinstudios.iscan.scanlibrary.Loader;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
 import com.nalinstudios.iscan.scanlibrary.ScanFragment;
+import com.nalinstudios.iscan.scanlibrary.Utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -161,7 +164,6 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                 @Override
                 public void onPictureTaken(byte[] data, Camera cam) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    bitmap = rotateImage(bitmap);
                     File mFile = new File(dir, Statics.randString() + ".jpg");
                     try {
                         if (!mFile.exists()) {
@@ -179,6 +181,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                         Toast.makeText(getApplicationContext(), "Couldn't Click picture. Please Try again...", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
+                    rotateImage(mFile);
                     startScan(mFile);
                     camera.startPreview();
                 }
@@ -331,20 +334,48 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     }
 
     /**
-     * A function to rotate the image according to the camera orientation
-     * @param bmp the bitmap to be rotated
-     * @return the rotated bitmap
+     * A function to rotate the image according to the camera orientation received by EXIF
+     * @param bmpfile the bitmap to be rotated
      */
-    protected Bitmap rotateImage(Bitmap bmp){
-        int deg = getRotation();
-        if (deg == 0){
-            //As the image does not need to be rotated.
-            return bmp;
+    protected void rotateImage(File bmpfile){
+        ExifInterface exif = null;
+        Bitmap bitmap = null;
+        try{
+            bitmap = Utils.getBitmap(this,Uri.fromFile(bmpfile));
+            exif = new ExifInterface(bmpfile);
+        }catch (IOException e){
+            e.printStackTrace();
         }
+
+
+        int orientation = 0;
+        if (exif != null){
+            orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        }
+
+        // Get a default orientation of the camera
+        int rotate = getRotation();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotate = 270;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotate = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotate = 90;
+                break;
+        }
+
         Matrix matrix = new Matrix();
-        matrix.postRotate(deg);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bmp, bmp.getWidth(), bmp.getHeight(), true);
-        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        matrix.postRotate(rotate);
+
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        try {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(bmpfile));
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
 

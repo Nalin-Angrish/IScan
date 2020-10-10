@@ -31,7 +31,7 @@ public class Utils {
      * @param uri the URI to obtain image from.
      * @return the obtained bitmap
      */
-    static Bitmap getBitmap(Context ctx, final Uri uri) throws IOException {
+    public static Bitmap getBitmap(Context ctx, final Uri uri) throws IOException {
         return MediaStore.Images.Media.getBitmap(ctx.getContentResolver(), uri);
     }
 }
