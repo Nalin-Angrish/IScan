@@ -152,6 +152,9 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
     }
 
 
+    /**
+     * A function to clear this activity and free up memory.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
