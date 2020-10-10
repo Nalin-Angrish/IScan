@@ -104,7 +104,9 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
                 try {
                     if (Statics.isAvailable(tBox.getText().toString())) {
                         for (ResultFragment frag : fragList) {
-                            frag.finish();
+                            if (!frag.deleted){
+                                frag.finish();
+                            }
                         }
                         Statics.createPdf(getApplication(), tBox.getText().toString());
                         Intent intent = new Intent(EditViewActivity.this, MainActivity.class);
@@ -133,20 +135,8 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
      * @param v the view object of the button.
      */
     @Override
-    public void onClick(View v){/*
-        if (v.equals(delB)){
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_delete)
-                    .setTitle("Delete?")
-                    .setMessage("Are you sure you want to delete this page? This operation cannot be undone.")
-                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            deleteCurrentPic();
-                        }
-                    })
-                    .setNegativeButton("Don't Delete", null);//.show();
-        }else */if (v.equals(finishB)){
+    public void onClick(View v){
+        if (v.equals(finishB)){
             Askname();
         }
     }
@@ -159,5 +149,22 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+
+    /**
+     * A function to remove the fragment when it's image is deleted.
+     * @param fragment the fragment to be removed
+     */
+    public void delete(ResultFragment fragment){
+        int index = fragList.indexOf(fragment);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        ((LinearLayout)findViewById(R.id.viewList)).removeViewAt(index);
+        transaction.remove(fragment);
+        fragList.remove(fragment);
+        transaction.commit();
+        if (fragList.size()==0){ //all images have been deleted
+            this.onBackPressed();
+        }
     }
 }

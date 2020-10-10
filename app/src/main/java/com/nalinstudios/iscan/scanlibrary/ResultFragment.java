@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-
+import com.nalinstudios.iscan.EditViewActivity;
 import com.nalinstudios.iscan.R;
 
 import java.io.File;
@@ -38,6 +38,8 @@ public class ResultFragment extends Fragment{
     private Bitmap rotoriginal;
     /** The Fragment to show loading when any operation is being performed*/
     private static ProgressDialogFragment progressDialogFragment;
+    /** A variable used by the EditViewActivity to check whether the image has been deleted or not*/
+    public boolean deleted = false;
 
 
 
@@ -65,6 +67,7 @@ public class ResultFragment extends Fragment{
         Button grayModeButton;
         Button bwButton;
         Button rotcButton;
+        Button delButton;
         scannedImageView = view.findViewById(R.id.scannedImage);
         originalButton = view.findViewById(R.id.original);
         originalButton.setOnClickListener(new OriginalButtonClickListener());
@@ -74,9 +77,10 @@ public class ResultFragment extends Fragment{
         grayModeButton.setOnClickListener(new GrayButtonClickListener());
         bwButton = view.findViewById(R.id.BWMode);
         bwButton.setOnClickListener(new BWButtonClickListener());
-
         rotcButton = view.findViewById(R.id.rotcButton);
         rotcButton.setOnClickListener(new RotButtonClickListener());
+        delButton = view.findViewById(R.id.delete);
+        delButton.setOnClickListener(new DeleteButtonListener());
 
         getBitmap();
     }
@@ -286,6 +290,22 @@ public class ResultFragment extends Fragment{
                     });
                 }
             });
+        }
+    }
+
+
+    /**
+     * A class to delete the image
+     */
+    private class DeleteButtonListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            // noinspection ConstantConditions
+            File imageFile = new File(getUri().getPath());
+            if (imageFile.exists()){
+                imageFile.delete();
+            }
+            ((EditViewActivity)getActivity()).delete(ResultFragment.this);
         }
     }
 

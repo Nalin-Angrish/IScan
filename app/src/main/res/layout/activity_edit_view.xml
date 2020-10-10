@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".EditViewActivity">
 
-
     <com.nalinstudios.iscan.internal.LockedHScrollView
         android:id="@+id/scrollzone"
         android:layout_width="match_parent"
@@ -36,6 +35,6 @@
         app:backgroundTint="#FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#00FFCF"
+        app:rippleColor="#DD0000"
         app:srcCompat="@android:drawable/ic_media_next" />
 </androidx.constraintlayout.widget.ConstraintLayout>
