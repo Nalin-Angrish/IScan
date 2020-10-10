@@ -68,6 +68,8 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
     ArrayList<Uri> images = new ArrayList<>();
     /** A reference to the current fragment initialized */
     Fragment currentFragment;
+    /** The directory of the current session*/
+    File dir;
 
 
     /**
@@ -92,6 +94,12 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         settingsB = findViewById(R.id.settings);
         settingsB.setOnClickListener(this);
         countView = findViewById(R.id.countView);
+
+        String dirname = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "");
+        dir = new File(getFilesDir(), dirname);
+        if (!dir.exists()){
+            Log.println(Log.VERBOSE,"DIR", String.valueOf(dir.mkdir()));
+        }
     }
 
 
@@ -143,11 +151,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      * A function to handle the click of a picture.
      */
     protected void click(){
-        String dirname = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "");
-        final File dir = new File(getFilesDir(), dirname);
-        if (!dir.exists()){
-            Log.println(Log.VERBOSE,"DIR", String.valueOf(dir.mkdir()));
-        }
+
         final File[] files = dir.listFiles();
         assert files != null;
 
@@ -387,5 +391,23 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
         return info.orientation;
+    }
+
+
+    /**
+     * A function mainly intended to refresh the screen count and hide the next-button
+     * when the user returns from the EditViewActivity ( hide if all pictures have been deleted by the user )
+     */
+    @Override
+    protected void onResume() {
+        int i = 0;
+        try {
+            i = dir.list().length;
+        }catch (NullPointerException e){e.printStackTrace();}
+        countView.setText(String.valueOf(i));
+        if (i==0){
+            nextB.setVisibility(View.INVISIBLE);
+        }
+        super.onResume();
     }
 }

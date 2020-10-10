@@ -2,6 +2,7 @@ package com.nalinstudios.iscan.scanlibrary;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.nalinstudios.iscan.EditViewActivity;
 import com.nalinstudios.iscan.R;
@@ -300,6 +303,26 @@ public class ResultFragment extends Fragment{
     private class DeleteButtonListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Delete?")
+                    .setMessage("Are you sure you want to delete the image? this can't be undone")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            delete();
+                        }
+                    })
+                    .setNegativeButton("Don't delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_menu_delete)
+                    .show();
+        }
+
+        private void delete(){
             // noinspection ConstantConditions
             File imageFile = new File(getUri().getPath());
             if (imageFile.exists()){
