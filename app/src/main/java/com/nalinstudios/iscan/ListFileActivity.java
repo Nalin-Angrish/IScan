@@ -103,6 +103,15 @@ public class ListFileActivity extends ListActivity {
      * This would be used to provide the user the options to share or view the pdf
      */
     private class LongPress implements AdapterView.OnItemLongClickListener {
+
+        /**
+         * The actual function that shows the menu
+         * @param parent the adapterView of the List
+         * @param view the view that was actually clicked
+         * @param position the index of the item clicked
+         * @param id the row id of the item that was clicked
+         * @return true
+         */
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             final String filename = (String) getListAdapter().getItem(position);
