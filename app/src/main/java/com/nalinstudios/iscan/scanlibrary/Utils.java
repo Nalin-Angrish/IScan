@@ -3,9 +3,11 @@ package com.nalinstudios.iscan.scanlibrary;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
+import android.util.Log;
 
-import java.io.IOException;
+import java.io.File;
+
+import id.zelory.compressor.Compressor;
 
 /**
  * The class containing helper method(s)
@@ -31,8 +33,13 @@ public class Utils {
      * @param uri the URI to obtain image from.
      * @return the obtained bitmap
      */
-    public static Bitmap getBitmap(Context ctx, final Uri uri) throws IOException {
-        return MediaStore.Images.Media.getBitmap(ctx.getContentResolver(), uri);
+    public static Bitmap getBitmap(Context ctx, final Uri uri){
+        Bitmap img = new Compressor(ctx)
+                .setQuality(70)
+                .compressToBitmap(new File(uri.getPath()));
+        Log.println(Log.ASSERT, "memory used: ", (img.getAllocationByteCount()/1024)+" kb");
+        return img;
     }
+
 }
 

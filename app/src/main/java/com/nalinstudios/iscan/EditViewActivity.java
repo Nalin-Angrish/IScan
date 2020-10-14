@@ -59,30 +59,35 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
         String sessionDir = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "hello");
         dir = new File(getFilesDir(), sessionDir);
 
-        FragmentManager manager = getFragmentManager();
+        final FragmentManager manager = getFragmentManager();
 
-        for (int i = 0; i < dir.listFiles().length; i++) {
-            FragmentTransaction transaction = manager.beginTransaction();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < dir.listFiles().length; i++) {
+                    FragmentTransaction transaction = manager.beginTransaction();
 
-            File imageFile = dir.listFiles()[i];
-            Bundle args = new Bundle();
-            args.putParcelable(ScanConstants.SCANNED_RESULT, Uri.fromFile(imageFile));
-            args.putString(ScanConstants.SCAN_FILE, imageFile.getAbsolutePath());
-            ResultFragment result = new ResultFragment();
-            result.setArguments(args);
+                    File imageFile = dir.listFiles()[i];
+                    Bundle args = new Bundle();
+                    args.putParcelable(ScanConstants.SCANNED_RESULT, Uri.fromFile(imageFile));
+                    args.putString(ScanConstants.SCAN_FILE, imageFile.getAbsolutePath());
+                    ResultFragment result = new ResultFragment();
+                    result.setArguments(args);
 
 
-            LinearLayout l = new LinearLayout(this);
-            l.setId(View.generateViewId());
-            transaction.add(l.getId(), result, "result-"+i);
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, LinearLayout.LayoutParams.MATCH_PARENT);
-            l.setLayoutParams(param);
-            ((LinearLayout)findViewById(R.id.viewList)).addView(l,i);
-            findViewById(R.id.viewList).invalidate();
-            fragList.add(result);
-            transaction.commit();
+                    LinearLayout l = new LinearLayout(EditViewActivity.this);
+                    l.setId(View.generateViewId());
+                    transaction.add(l.getId(), result, "result-"+i);
+                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, LinearLayout.LayoutParams.MATCH_PARENT);
+                    l.setLayoutParams(param);
+                    ((LinearLayout)findViewById(R.id.viewList)).addView(l,i);
+                    findViewById(R.id.viewList).invalidate();
+                    fragList.add(result);
+                    transaction.commit();
 
-        }
+                }
+            }
+        }).start();
         Log.println(Log.ASSERT, "count", ((LinearLayout)findViewById(R.id.viewList)).getChildCount()+"");
     }
 

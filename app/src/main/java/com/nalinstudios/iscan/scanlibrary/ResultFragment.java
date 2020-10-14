@@ -20,7 +20,6 @@ import com.nalinstudios.iscan.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -94,9 +93,7 @@ public class ResultFragment extends Fragment{
      */
     private void getBitmap() {
         Uri uri = getUri();
-        try{
-            onReceiveBitmap(Utils.getBitmap(getActivity(), uri));
-        }catch (IOException e){e.printStackTrace();}
+        onReceiveBitmap(Utils.getBitmap(getActivity(), uri));
     }
 
 

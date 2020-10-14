@@ -78,7 +78,7 @@ public class Statics {
             float ph = rat*ih;
             Bitmap page = Bitmap.createScaledBitmap(image,(int)pw,(int)ph,true);    // scale the bitmap so that the page width is standard (of an A4 size)
 
-            doc.setPageSize(new Rectangle(page.getWidth(), page.getHeight()));
+            doc.setPageSize(new Rectangle(pw, ph));
             doc.newPage();
             Image img = Image.getInstance(toByteArray(page));
             doc.add(img);
