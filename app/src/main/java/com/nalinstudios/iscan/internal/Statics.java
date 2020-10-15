@@ -32,6 +32,8 @@ import java.util.List;
 public class Statics {
     /** The characters which can be used to generate a random string*/
     private final static String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    /** The width of the page*/
+    final private static int PageWidth = 700;
 
     /**
      * A function to generate a random string
@@ -67,16 +69,16 @@ public class Statics {
         }
 
         Document doc = new Document(PageSize.A4,0,0,0,0);
-        PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(pdf));
+        PdfWriter.getInstance(doc, new FileOutputStream(pdf));
         doc.open();
         doc.addAuthor("IScan - The Document Scanner");
         for (Bitmap image : images){
-            float pw = PageSize.A4.getWidth();
+            float pw = PageWidth;
             float iw = image.getWidth();
             float ih = image.getHeight();
             float rat = pw/iw;
             float ph = rat*ih;
-            Bitmap page = Bitmap.createScaledBitmap(image,(int)pw,(int)ph,true);    // scale the bitmap so that the page width is standard (of an A4 size)
+            Bitmap page = Bitmap.createScaledBitmap(image,(int)pw,(int)ph,true);    // scale the bitmap so that the page width is standard (it looks clean and good)
 
             doc.setPageSize(new Rectangle(pw, ph));
             doc.newPage();
@@ -86,8 +88,6 @@ public class Statics {
 
 
         doc.close();
-        writer.flush();
-        writer.close();
         File thumbnailFile = getThumbnail(app);
         File dataStorage = new File(pdfFolder, ".data-internal");
         if (!dataStorage.exists()){System.out.println(dataStorage.mkdir());}
@@ -104,7 +104,7 @@ public class Statics {
      * @param image The image to be decoded into byte array.
      * @return The byte array for the image.
      */
-    public static byte[] toByteArray(Bitmap image){
+    private static byte[] toByteArray(Bitmap image){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         return baos.toByteArray();
