@@ -262,6 +262,8 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      */
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        camera.stopPreview();
+        camera.release();
         return true;
     }
 
@@ -322,17 +324,6 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         frag.setArguments(b);
         getFragmentManager().beginTransaction().add(R.id.__main__, frag).commit();
         currentFragment = frag;
-    }
-
-
-    /**
-     * A function to release the camera when activity is finished
-     */
-    @Override
-    public void finish() {
-        super.finish();
-        camera.stopPreview();
-        camera.release();
     }
 
 
