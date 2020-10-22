@@ -51,10 +51,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#00FFFFFF"
+                    android:scaleX="-1"
                     android:src="@android:drawable/ic_menu_sort_by_size"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
