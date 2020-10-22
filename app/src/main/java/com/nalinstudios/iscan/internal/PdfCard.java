@@ -248,7 +248,7 @@ public class PdfCard{
 
 
     /**
-     * A function to edit the file when the user wants to. (Current;y not supported)
+     * A function to edit the file when the user wants to. (Currently not supported)
      */
     private void edit(){
         Toast.makeText(activity, "Editing functionality will be soon added", Toast.LENGTH_LONG).show();
