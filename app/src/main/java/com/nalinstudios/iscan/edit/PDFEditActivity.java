@@ -1,4 +1,4 @@
-package com.nalinstudios.iscan;
+package com.nalinstudios.iscan.edit;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -23,10 +23,11 @@ import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfObject;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStream;
+import com.nalinstudios.iscan.MainActivity;
+import com.nalinstudios.iscan.R;
 import com.nalinstudios.iscan.internal.Statics;
 import com.nalinstudios.iscan.scanlibrary.Loader;
 import com.nalinstudios.iscan.scanlibrary.ProgressDialogFragment;
-import com.nalinstudios.iscan.scanlibrary.ResultFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
 
 import java.io.ByteArrayOutputStream;
@@ -49,6 +50,9 @@ public class PDFEditActivity extends FragmentActivity implements View.OnClickLis
     List<ResultFragment> fragList = new ArrayList<>();
     /** A fragment to show to the user while the pdf is decoded*/
     static ProgressDialogFragment progressDialogFragment;
+    /** */
+    ScanFragment currentFragment;
+    ResultFragment currentResult;
 
 
 
@@ -260,6 +264,34 @@ public class PDFEditActivity extends FragmentActivity implements View.OnClickLis
      */
     protected synchronized void dismissDialog() {
         progressDialogFragment.dismissAllowingStateLoss();
+    }
+
+
+    /**
+     * A function to get notified when the corners are selected and the final image after cropping is available
+     */
+    public void onScanFinish(){
+        getFragmentManager().beginTransaction().remove(currentFragment).commit();
+        finishB.setVisibility(View.VISIBLE);
+        currentResult.getBitmap();
+        currentResult = null;
+        currentFragment = null;
+    }
+
+    /**
+     * A function to create the window to crop the image
+     * @param rfrag the resultFragment showing the image
+     */
+    public void startScan(ResultFragment rfrag){
+        ScanFragment frag = new ScanFragment();
+        Bundle b = new Bundle();
+        b.putParcelable(ScanConstants.SELECTED_BITMAP, rfrag.getUri());
+        b.putString(ScanConstants.SCAN_FILE, rfrag.getUri().getPath());
+        frag.setArguments(b);
+        getFragmentManager().beginTransaction().add(R.id.pe_act_main, frag).commit();
+        finishB.setVisibility(View.GONE);
+        currentFragment = frag;
+        currentResult = rfrag;
     }
 
     static {

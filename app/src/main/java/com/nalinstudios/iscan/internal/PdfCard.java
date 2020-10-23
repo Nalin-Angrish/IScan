@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -26,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
-import com.nalinstudios.iscan.PDFEditActivity;
+import com.nalinstudios.iscan.edit.PDFEditActivity;
 import com.nalinstudios.iscan.R;
 
 import java.io.File;
