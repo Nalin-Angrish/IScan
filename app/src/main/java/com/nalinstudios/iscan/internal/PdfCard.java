@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
+import com.nalinstudios.iscan.PDFEditActivity;
 import com.nalinstudios.iscan.R;
 
 import java.io.File;
@@ -251,6 +254,9 @@ public class PdfCard{
      * A function to edit the file when the user wants to. (Currently not supported)
      */
     private void edit(){
-        Toast.makeText(activity, "Editing functionality will be soon added", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(activity, PDFEditActivity.class);
+        i.setData(Uri.fromFile(getFile(file)));
+        activity.startActivity(i);
+        Toast.makeText(activity, "Signal Sent", Toast.LENGTH_LONG).show();
     }
 }
