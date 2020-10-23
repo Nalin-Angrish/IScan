@@ -25,7 +25,7 @@ import java.io.FileOutputStream;
 import java.util.Objects;
 
 /**
- * A customized version of ResultFragment
+ * A customized version of ResultFragment specifically enhanced for later-editing purposes
  * @author Nalin Angrish, Jhansi.
  */
 public class ResultFragment extends Fragment{

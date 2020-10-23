@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * A customized version of ScanFragment
+ * A customized version of ScanFragment specifically enhanced for later-editing purposes
  * @author Nalin Angrish, Jhansi.
  */
 public class ScanFragment extends Fragment{

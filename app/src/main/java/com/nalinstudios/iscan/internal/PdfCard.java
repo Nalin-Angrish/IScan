@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
+import com.nalinstudios.iscan.MainActivity;
 import com.nalinstudios.iscan.edit.PDFEditActivity;
 import com.nalinstudios.iscan.R;
 
@@ -226,6 +227,7 @@ public class PdfCard{
                             File actual = getFile(file);
                             if (actual.delete()) {
                                 Toast.makeText(activity, "File permanently deleted", Toast.LENGTH_LONG).show();
+                                ((MainActivity)activity).onResume();
                                 return;
                             }
                         }
@@ -238,6 +240,7 @@ public class PdfCard{
                     public void onClick(DialogInterface dialog, int which) {
                         if (file.delete()){
                             Toast.makeText(activity, "File deleted from menu", Toast.LENGTH_LONG).show();
+                            ((MainActivity)activity).onResume();
                             return;
                         }
                         Toast.makeText(activity, "File couldn't be deleted", Toast.LENGTH_LONG).show();

@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
      * This function will create all the CardLayouts for the PDFs.
      */
     @Override
-    protected void onResume() {
+    public void onResume() {
         clear();
 
         File mainf = new File(Environment.getExternalStorageDirectory(), "IScan");
