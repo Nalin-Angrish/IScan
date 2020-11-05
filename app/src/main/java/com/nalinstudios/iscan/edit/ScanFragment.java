@@ -24,6 +24,7 @@ import com.nalinstudios.iscan.scanlibrary.PolygonView;
 import com.nalinstudios.iscan.scanlibrary.ProgressDialogFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
 import com.nalinstudios.iscan.scanlibrary.SingleButtonDialogFragment;
+import com.nalinstudios.iscan.scanlibrary.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;

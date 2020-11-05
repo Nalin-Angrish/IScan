@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.nalinstudios.iscan.R;
 import com.nalinstudios.iscan.scanlibrary.ProgressDialogFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
+import com.nalinstudios.iscan.scanlibrary.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
