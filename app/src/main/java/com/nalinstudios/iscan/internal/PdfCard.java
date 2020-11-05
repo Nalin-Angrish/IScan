@@ -9,14 +9,17 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,6 +132,8 @@ public class PdfCard{
                             delete();
                         }else if (item.getTitle().toString().toLowerCase().contains("edit")){
                             edit();
+                        }else if (item.getTitle().toString().toLowerCase().contains("rename")){
+                            rename();
                         }
                         return true;
                     }
@@ -253,12 +258,50 @@ public class PdfCard{
 
 
     /**
-     * A function to edit the file when the user wants to. (Currently not supported)
+     * A function to edit the file when the user wants to.
      */
     private void edit(){
         Intent i = new Intent(activity, PDFEditActivity.class);
         i.setData(Uri.fromFile(getFile(file)));
         activity.startActivity(i);
         Toast.makeText(activity, "Signal Sent", Toast.LENGTH_LONG).show();
+    }
+
+
+    /**
+     * A function to rename the already scanned file.
+     */
+    private void rename(){
+        View p = activity.getLayoutInflater().inflate(R.layout.rename_popup, null);
+        String name;
+        try {
+            name = file.getName().replace(".jpg","");
+        }catch (Exception e){
+            name = file.getName();
+        }
+        ((TextView)p.findViewById(R.id.message)).setText("Rename ".concat(name).concat(" to:"));
+        final PopupWindow window = new PopupWindow(p, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        window.setAnimationStyle(android.R.style.Animation_Dialog);
+        window.showAtLocation(p, Gravity.CENTER, 0, 0);
+        window.getContentView().findViewById(R.id.end).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                EditText tBox = window.getContentView().findViewById(R.id.newPdfName);
+                window.dismiss();
+                if (Statics.isAvailable(tBox.getText().toString())){
+                    String name = tBox.getText().toString();
+                    File actual = getFile(file);
+                    System.out.println(actual.renameTo(new File(actual.getParentFile(), name+".pdf")));
+                    System.out.println(file.renameTo(new File(file.getParentFile(), name+".jpg")));
+                    ((MainActivity)activity).onResume();
+                }
+            }
+        });
+        window.getContentView().findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                window.dismiss();
+            }
+        });
     }
 }

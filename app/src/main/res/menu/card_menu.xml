@@ -9,4 +9,8 @@
         android:id="@+id/two"
         android:title="Delete" />
 
+    <item
+        android:id="@+id/three"
+        android:title="Rename" />
+
 </menu>
