@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,7 +149,6 @@ public class PDFEditActivity extends FragmentActivity implements View.OnClickLis
                 }
             }
         }).start();
-        Log.println(Log.ASSERT, "count", ((LinearLayout)findViewById(R.id.viewList)).getChildCount()+"");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

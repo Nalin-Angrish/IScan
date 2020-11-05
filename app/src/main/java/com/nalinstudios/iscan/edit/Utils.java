@@ -1,12 +1,9 @@
-package com.nalinstudios.iscan.scanlibrary;
+package com.nalinstudios.iscan.edit;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-
-import java.io.File;
-
-import id.zelory.compressor.Compressor;
+import android.provider.MediaStore;
 
 /**
  * The class containing helper method(s)
@@ -33,9 +30,11 @@ public class Utils {
      * @return the obtained bitmap
      */
     public static Bitmap getBitmap(Context ctx, final Uri uri){
-        return new Compressor(ctx)
-                .setQuality(70)
-                .compressToBitmap(new File(uri.getPath()));
+        try {
+            return MediaStore.Images.Media.getBitmap(ctx.getContentResolver(), uri);
+        }catch (Exception e){
+            return null;
+        }
     }
 
 }

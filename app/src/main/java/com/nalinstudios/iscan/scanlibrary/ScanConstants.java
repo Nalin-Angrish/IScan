@@ -1,6 +1,5 @@
 package com.nalinstudios.iscan.scanlibrary;
 
-import android.os.Environment;
 
 /**
  * A class to contain all the constants for the scanLibrary

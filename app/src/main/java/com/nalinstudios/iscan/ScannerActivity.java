@@ -19,7 +19,6 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.TextureView;
 import android.view.View;
@@ -100,7 +99,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         String dirname = getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "");
         dir = new File(getFilesDir(), dirname);
         if (!dir.exists()){
-            Log.println(Log.VERBOSE,"DIR", String.valueOf(dir.mkdir()));
+            System.out.println(dir.mkdir());
         }
     }
 
@@ -127,7 +126,7 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
             texture.setOnTouchListener(zoomHandler);
             camera.startPreview();
         } catch (Exception e) {
-            Log.e("Opening Camera", e.toString());
+            System.out.println(e.toString());
         }
     }
 
@@ -173,14 +172,14 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
                     File mFile = new File(dir, Statics.randString() + ".jpg");
                     try {
                         if (!mFile.exists()) {
-                            Log.println(Log.VERBOSE, "IMG", String.valueOf(mFile.createNewFile()));
+                            System.out.println(mFile.createNewFile());
                         }
                         OutputStream imgStream = new FileOutputStream(mFile);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imgStream);
                         try {
                             Thread.sleep(400);
                         } catch (InterruptedException e) {
-                            Log.e("Couldn't wait", e.toString());
+                            System.out.println(e.toString());
                         }
                         count = count + 1;
                     } catch (IOException e) {
@@ -242,7 +241,6 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
         b.putParcelableArrayList("content", images);
         intent.putExtras(b);
         startActivity(intent);
-        Log.d("Submitted", getApplication().getSharedPreferences("IScan", MODE_PRIVATE).getString("sessionName", "Null"));
     }
 
     /**

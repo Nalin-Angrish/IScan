@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.Log;
 
 
 import com.itextpdf.text.Document;
@@ -57,9 +56,9 @@ public class Statics {
      */
     public static void createPdf(Application app, String name) throws IOException, DocumentException {
         File pdfFolder = new File(Environment.getExternalStorageDirectory(), "IScan");
-        if (!pdfFolder.exists()){Log.println(Log.ASSERT, "PDFFOLDER", pdfFolder.mkdir()+"");}
+        if (!pdfFolder.exists()){System.out.println(pdfFolder.mkdir());}
         File pdf = new File(pdfFolder, name+".pdf");
-        if (!pdf.exists()){Log.println(Log.ASSERT, "PDFFILE", pdfFolder.createNewFile()+"");}
+        if (!pdf.exists()){System.out.println(pdfFolder.createNewFile());}
         String sessionName = app.getSharedPreferences("IScan", Context.MODE_PRIVATE).getString("sessionName", "hello");
         File imageFolder = new File(app.getFilesDir(), sessionName);
         List<Bitmap> images = new ArrayList<>();
