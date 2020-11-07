@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -88,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         getApplicationContext().getSharedPreferences("IScan", MODE_PRIVATE).edit().putString("sessionName", Statics.randString()).apply();
         File[] folder = new File(new File(Environment.getExternalStorageDirectory(), "IScan"), ".data-internal").listFiles();
         assert folder != null;
+        Arrays.sort(folder, new Comparator<File>(){
+            public int compare(File f1, File f2){
+                return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+            } });
         folder = reverseArray(folder);
         int stdlimit = 10; // this limit is the number of cards that will be shown. Keep this as low so it does not lag the device (low end devices may lag)
                 //But keep it high enough that the user does not get frustrated by asking to open another app (the file explorer)
@@ -109,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 File file = folder[i];
                 PdfCard pdfCard = new PdfCard(getApplicationContext(), file, getLayoutInflater(), this);
                 LinearLayout main = findViewById(R.id.__main__);
-                main.addView(pdfCard.getCard());
+                main.addView(pdfCard.getCard(), i);
             }
         }catch (NullPointerException e){
             e.printStackTrace();

@@ -5,6 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicConvolve3x3;
 
 
 import com.itextpdf.text.Document;
@@ -32,7 +36,7 @@ public class Statics {
     /** The characters which can be used to generate a random string*/
     private final static String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     /** The width of the page*/
-    final private static int PageWidth = 700;
+    final private static int PageWidth = Math.round(PageSize.A0.getWidth());
 
     /**
      * A function to generate a random string
@@ -78,10 +82,9 @@ public class Statics {
             float rat = pw/iw;
             float ph = rat*ih;
             Bitmap page = Bitmap.createScaledBitmap(image,(int)pw,(int)ph,true);    // scale the bitmap so that the page width is standard (it looks clean and good)
-
             doc.setPageSize(new Rectangle(pw, ph));
             doc.newPage();
-            Image img = Image.getInstance(toByteArray(page));
+            Image img = Image.getInstance(toByteArray(doSharpen(app, doSharpen(app ,page))));
             doc.add(img);
         }
 
@@ -172,5 +175,36 @@ public class Statics {
             }
         }
         return true;
+    }
+
+
+    /**
+     * A function to sharpen the image
+     * @param ctx the app context
+     * @param original the bitmap to sharpen
+     * @return the sharpened bitmap
+     */
+    public static Bitmap doSharpen(Context ctx, Bitmap original) {
+        float[] matrix = { -0.15f, -0.15f, -0.15f, -0.15f, 2.2f, -0.15f, -0.15f, -0.15f, -0.15f };
+        Bitmap bitmap = Bitmap.createBitmap(
+                original.getWidth(), original.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        RenderScript rs = RenderScript.create(ctx);
+
+        Allocation allocIn = Allocation.createFromBitmap(rs, original);
+        Allocation allocOut = Allocation.createFromBitmap(rs, bitmap);
+
+        ScriptIntrinsicConvolve3x3 convolution
+                = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
+        convolution.setInput(allocIn);
+        convolution.setCoefficients(matrix);
+        convolution.forEach(allocOut);
+
+        allocOut.copyTo(bitmap);
+        rs.destroy();
+
+        return bitmap;
+
     }
 }
