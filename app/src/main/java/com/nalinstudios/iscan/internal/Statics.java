@@ -35,8 +35,8 @@ import java.util.List;
 public class Statics {
     /** The characters which can be used to generate a random string*/
     private final static String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    /** The width of the page*/
-    final private static int PageWidth = Math.round(PageSize.A0.getWidth());
+    /** The standard width of the page */
+    final private static int PageWidth = Math.round(PageSize.A3.getWidth());
 
     /**
      * A function to generate a random string
