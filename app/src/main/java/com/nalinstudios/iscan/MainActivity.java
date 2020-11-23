@@ -35,6 +35,8 @@ import java.util.List;
  * @author Nalin Angrish.
  */
 public class MainActivity extends AppCompatActivity {
+
+
     /**
      * The on create method of MainActivity.
      * @param savedInstanceState The state of the saved instance. This state is not used.
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
+        finish();
     }
 
 

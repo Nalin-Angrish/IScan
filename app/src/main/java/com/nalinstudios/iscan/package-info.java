@@ -5,6 +5,7 @@
  *      <li>ScannerActivity : This activity is the window where the user will scan the documents.</li>
  *      <li>EditViewActivity : Activity to handle all the editing functionality.</li>
  *      <li>ListFileActivity : An activity that will work as a file browser to show all the PDFs scanned.</li>
+ *      <li>SplashActivity : A splash screen for the app.</li>
  *      </ol>
  *
  * @author Nalin Angrish.
