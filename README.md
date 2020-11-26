@@ -42,27 +42,14 @@ Visit https://nalinstudios.herokuapp.com/IScan for more details.<br><br><br>
 
 <br><br>
 # Screenshots:
-<style>
-@media only screen and (max-width: 600px) {
-  .screenshot{
-    height: 400px;
-  }
-}
-.screenshot{
-  height: 600px;
-  border: 2px solid black;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-</style>
 <div id="screenshots" style="white-space: nowrap;">
     <div style="overflow-x: scroll;overflow-y: hidden;">
-        <img src="GPlay/RawScreenshots/ss1.jpeg" class="screenshot">
-        <img src="GPlay/RawScreenshots/ss2.jpg"  class="screenshot">
-        <img src="GPlay/RawScreenshots/ss3.jpg"  class="screenshot">
-        <img src="GPlay/RawScreenshots/ss4.jpg"  class="screenshot">
-        <img src="GPlay/RawScreenshots/ss5.jpg"  class="screenshot">
-        <img src="GPlay/RawScreenshots/ss6.jpg"  class="screenshot">
+        <img src="GPlay/RawScreenshots/ss1.jpeg">
+        <img src="GPlay/RawScreenshots/ss2.jpg" >
+        <img src="GPlay/RawScreenshots/ss3.jpg" >
+        <img src="GPlay/RawScreenshots/ss4.jpg" >
+        <img src="GPlay/RawScreenshots/ss5.jpg" >
+        <img src="GPlay/RawScreenshots/ss6.jpg" >
     </div>
 </div>
 
