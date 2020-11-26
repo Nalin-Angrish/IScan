@@ -4,7 +4,7 @@ Official website: [https://nalinstudios.herokuapp.com/IScan](https://nalinstudio
 
 
 IScan - The Indian Scanner app, Made for Indians, By an Indian.<br>
-This is a purely Indian Scanner app that provides you with an easy to use interface, quick usage and completely safe way of scanning as PDFs, Saving and Sharing them.
+This is a purely Indian Scanner app that provides you with an easy to use interface, quick usage and completely safe way of scanning as PDFs, Saving and Sharing them.<br><br>
 Scan High-Quality PDFs quickly and efficiently by using IScan, that is a Lightweight, Fast, and Efficient Document Scanner. This app turns your Android device into a fast, lightweight and portable document scanner. This application allows you to easily scan documents and share them using your preferred mode of file sharing. The true power of this application is that it is an open source and would readily accept any Modifications, Upgrades, Feature Requests and Bug Fixes.
 <br><br>
 Features:<br><br>
