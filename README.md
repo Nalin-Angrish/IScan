@@ -44,7 +44,7 @@ Visit https://nalinstudios.herokuapp.com/IScan for more details.<br><br><br>
 # Screenshots:
 <div id="screenshots" style="white-space: nowrap;">
     <div style="overflow-x: scroll;overflow-y: hidden;">
-        <img src="GPlay/RawScreenshots/ss1.jpeg" width="200" height="400">
+        <img src="GPlay/RawScreenshots/ss1.jpg" width="200" height="400">
         <img src="GPlay/RawScreenshots/ss2.jpg"  width="200" height="400">
         <img src="GPlay/RawScreenshots/ss3.jpg"  width="200" height="400">
         <img src="GPlay/RawScreenshots/ss4.jpg"  width="200" height="400">
