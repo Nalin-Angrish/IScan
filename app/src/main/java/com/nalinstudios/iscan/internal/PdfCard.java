@@ -39,12 +39,19 @@ import java.io.File;
  * @author Nalin Angrish.
  */
 public class PdfCard{
+    /** The main view that contains the content for the PDF Card*/
     private View content;
+    /** The thumbnail icon for the PDF Card*/
     private ImageView thumbnail;
+    /** The TextView representing the Title of the PDF*/
     private TextView title;
+    /** The imagebuttons present on the CardView*/
     private ImageButton view, share, options;
+    /** The context of the application */
     private Context context;
+    /** The activity creating the Card*/
     private AppCompatActivity activity;
+    /** The thumbnail file which can be used to get the original PDF File*/
     private File file;
 
     /**
@@ -54,7 +61,7 @@ public class PdfCard{
      * @param inflater The LayoutInflater of the activity.
      */
     public PdfCard(Context ctx, File file, LayoutInflater inflater, AppCompatActivity activity){
-        context = ctx;
+        this.context = ctx;
         this.activity = activity;
         content = inflater.inflate(R.layout.pdf_card, null);
         thumbnail = content.findViewById(R.id.pdfThumbnail);

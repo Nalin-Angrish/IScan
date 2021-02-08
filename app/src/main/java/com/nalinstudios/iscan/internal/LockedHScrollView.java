@@ -19,9 +19,21 @@ public class LockedHScrollView extends HorizontalScrollView {
 
 
 
-    public LockedHScrollView(Context context){super(context);}
-    public LockedHScrollView(Context context, AttributeSet attrs){super(context, attrs);}
-    public LockedHScrollView(Context context, AttributeSet attrs, int defStyleAttr){super(context, attrs, defStyleAttr);}
+    /** One of the entry points for constructing the ScrollView*/
+    public LockedHScrollView(Context context){super(context);init();}
+    /** One of the entry points for constructing the ScrollView*/
+    public LockedHScrollView(Context context, AttributeSet attrs){super(context, attrs);init();}
+    /** One of the entry points for constructing the ScrollView*/
+    public LockedHScrollView(Context context, AttributeSet attrs, int defStyleAttr){super(context, attrs, defStyleAttr);init();}
+
+
+    /**
+     * The main initializer.
+     */
+    public void init(){
+        setVerticalScrollBarEnabled(false);
+        setHorizontalScrollBarEnabled(false);
+    }
 
 
     /**

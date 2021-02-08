@@ -137,9 +137,11 @@ public class Statics {
      */
     private static File getThumbnail(Application app){
         String folder = app.getSharedPreferences("IScan", Context.MODE_PRIVATE).getString("sessionName", "hello");
-        File thumb = new File(app.getFilesDir(), folder).listFiles()[0];
-        assert thumb != null;
-        return  thumb;
+        File[] all = new File(app.getFilesDir(), folder).listFiles();
+        if (all!=null && all.length>0) {
+            return all[0];
+        }
+        return null;
     }
 
     /**

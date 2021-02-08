@@ -3,6 +3,7 @@ package com.nalinstudios.iscan;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,6 +18,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -91,11 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
         getApplicationContext().getSharedPreferences("IScan", MODE_PRIVATE).edit().putString("sessionName", Statics.randString()).apply();
         File[] folder = new File(new File(Environment.getExternalStorageDirectory(), "IScan"), ".data-internal").listFiles();
-        assert folder != null;
-        Arrays.sort(folder, new Comparator<File>(){
-            public int compare(File f1, File f2){
+        if (folder==null){folder=new File[]{};}
+        Arrays.sort(folder, new Comparator<File>() {
+            public int compare(File f1, File f2) {
                 return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-            } });
+            }
+        });
         folder = reverseArray(folder);
         int stdlimit = 10; // this limit is the number of cards that will be shown. Keep this as low so it does not lag the device (low end devices may lag)
                 //But keep it high enough that the user does not get frustrated by asking to open another app (the file explorer)
@@ -220,5 +224,33 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
+    /**
+     * A function to inflate the menu on the main screen for letting the User do some things like viewing the manual or the privacy policy of the app.
+     * @param menu The menu to be shown to the user.
+     * @return super's onCreateOptionsMenu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.mainmenu_manual).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent i = new Intent(MainActivity.this, TutorialActivity.class);
+                startActivity(i);
+                return true;
+            }
+        });
+        menu.findItem(R.id.mainmenu_privacypolicy).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.nalinangrish.me/apps/iscan/privacy-policy"));
+                startActivity(i);
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 }

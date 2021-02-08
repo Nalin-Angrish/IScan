@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nalinstudios.iscan.internal.Statics;
+import com.nalinstudios.iscan.scanlibrary.ProgressDialogFragment;
 import com.nalinstudios.iscan.scanlibrary.ResultFragment;
 import com.nalinstudios.iscan.scanlibrary.ScanConstants;
 
@@ -36,8 +37,10 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
     File dir;
     /** A list of all the ResultFragments created...*/
     List<ResultFragment> fragList = new ArrayList<>();
-
-
+    /** A progressbar to inform the user that the PDF is being created */
+    ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment("Creating PDF..");
+    /** A popup for letting the user enter a name for the PDF.*/
+    PopupWindow window;
 
     /**
      * The oncreate function to load the opencv library and initialize the main function.
@@ -96,32 +99,53 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
     protected void Askname(){
         View p = getLayoutInflater().inflate(R.layout.popup_enter_name, null);
 
-        final PopupWindow window = new PopupWindow(p, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        window = new PopupWindow();
+        window.setContentView(p);
+        window.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setAnimationStyle(android.R.style.Animation_Dialog);
         window.showAtLocation(p, Gravity.CENTER, 0, 0);
+        window.setFocusable(true);
+        window.update();
         window.getContentView().findViewById(R.id.end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                EditText tBox = window.getContentView().findViewById(R.id.pdfName);
-                window.dismiss();
-                try {
-                    if (Statics.isAvailable(tBox.getText().toString())) {
-                        for (ResultFragment frag : fragList) {
-                            if (!frag.deleted){
-                                frag.finish();
+                showProgressDialog("Converting to PDF...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean shouldClose = true;
+                        try {
+                            EditText tBox = window.getContentView().findViewById(R.id.pdfName);
+                            if (Statics.isAvailable(tBox.getText().toString())) {
+                                for (ResultFragment frag : fragList) {
+                                    if (!frag.deleted){
+                                        frag.finish();
+                                    }
+                                }
+                                Statics.createPdf(getApplication(), tBox.getText().toString());
+                            }else {
+                                Toast.makeText(getApplicationContext(), "A PDF with this name already exists. Please try again with a different name.", Toast.LENGTH_LONG).show();
+                                shouldClose = false;
                             }
+                        }catch (Exception e){
+                            Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                            shouldClose = false;
                         }
-                        Statics.createPdf(getApplication(), tBox.getText().toString());
-                        Intent intent = new Intent(EditViewActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        Toast.makeText(getApplicationContext(), "A PDF with this name already exists. Please try again with a different name.", Toast.LENGTH_LONG).show();
+                        dismissDialog();
+                        if (shouldClose){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent i = new Intent(EditViewActivity.this, MainActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            });
+                        }
                     }
-                }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                }).start();
             }
         });
         window.getContentView().findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -170,4 +194,31 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
             this.onBackPressed();
         }
     }
+
+
+    /**
+     * A function to show the progress dialog.
+     * @param message the message to show.
+     */
+    protected synchronized void showProgressDialog(String message) {
+        if (progressDialogFragment != null && progressDialogFragment.isVisible()) {
+            // Before creating another loading dialog, close all opened loading dialogs (if any)
+            progressDialogFragment.dismissAllowingStateLoss();
+        }
+        progressDialogFragment = null;
+        progressDialogFragment = new ProgressDialogFragment(message);
+        FragmentManager fm = getFragmentManager();
+        progressDialogFragment.show(fm, ProgressDialogFragment.class.toString());
+    }
+
+
+
+    /**
+     * A function to dismiss the progress dialog.
+     */
+    protected synchronized void dismissDialog() {
+        progressDialogFragment.dismissAllowingStateLoss();
+    }
+
+
 }

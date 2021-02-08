@@ -153,8 +153,8 @@ public class ScannerActivity extends AppCompatActivity implements TextureView.Su
      */
     protected void click(){
 
-        final File[] files = dir.listFiles();
-        assert files != null;
+        File[] temp = dir.listFiles();
+        final File[] files = temp==null?new File[]{}:temp;
 
         try {
             countView.setText(String.valueOf(files.length + 1));

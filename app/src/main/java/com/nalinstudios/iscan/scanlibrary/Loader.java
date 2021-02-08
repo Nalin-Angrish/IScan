@@ -5,8 +5,13 @@ package com.nalinstudios.iscan.scanlibrary;
  * @author Nalin Angrish, Sekar.
  */
 public class Loader {
+    /** Whether we have already loaded the native libraries or not */
     private static boolean done = false;
 
+
+    /**
+     * Load the native libraries.
+     */
     public static synchronized void load() {
         if (done)
             return;

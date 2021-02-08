@@ -1,6 +1,6 @@
 # IScan
 The Indian Scanner App - Made for the Indians, By the Indians<br>
-Official website: [https://nalinstudios.herokuapp.com/IScan](https://nalinstudios.herokuapp.com/IScan) <br><br>
+Official website: [http://www.nalinangrish.me/apps/iscan](http://www.nalinangrish.me/apps/iscan) <br><br>
 
 
 IScan - The Indian Scanner app, Made for Indians, By an Indian.<br>
@@ -25,7 +25,7 @@ What’s better than knowing what an app does and what things it has access to. 
 <br><br>
 If you ever feel that there is any bug in the Application, you can report that bug and even collaborate with us on this project and provide one of the best experiences to every user of this application.
 <br><br>
-Visit https://nalinstudios.herokuapp.com/IScan for more details.<br><br><br>
+Visit http://www.nalinangrish.me/apps/iscan for more details.<br><br><br>
 
 
 
@@ -65,27 +65,9 @@ Visit https://nalinstudios.herokuapp.com/IScan for more details.<br><br><br>
 
 
 <br><br>
-# Developer Zone:
-This project is based upon a customized version of NeutrinosPlatform's scanLibrary at https://github.com/NeutrinosPlatform/scanlibrary .
-### Setting up native libraries:
-
-Uncompress the jniLibs.7z from IScan/app/src/main/ using 7-Zip to IScan/app/src/main/jniLibs. Your directory structure should look something like this:
-~~~shell
-main\
-    +- java
-    |
-    +- res
-    |
-    +- jniLibs\
-    |         +- arm64-v8a\
-    |         |           +-libopencv_java3.so
-    |         |           +-libScanner.so
-    |         +- armeabi\
-    |         |         +-libopencv_java3.so
-    |         |         +-libScanner.so
-    |         +- ....
-    |
-    +- AndroidManifest.xml
-~~~
-
-If you need the documentation for the code of this project you can get it **[here](https://nalin-2005.github.io/IScan)**
+# Related Resources:
+- Developer Notes: [Visit on GitHub](DEVELOPER.md)
+- Privacy Policy: [Visit on GitHub](PrivacyPolicy.md) | [Visit on Website](http://www.nalinangrish.me/apps/iscan/privacy-policy)
+- Download: [GitHub Releases](http://github.com/Nalin-2005/IScan/releases/latest) | [Google Play Store](http://play.google.com/store/apps/details?id=com.nalinstudios.iscan)
+- Code Documentation: [Visit the Docs](http://docs.nalinangrish.me/IScan/)
+- Website: [nalinangrish.me/apps/IScan](http://www.nalinangrish.me/apps/iscan)
