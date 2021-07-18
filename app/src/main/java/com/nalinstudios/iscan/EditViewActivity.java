@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,7 +32,6 @@ import java.util.List;
  * Activity to handle all the editing functionality.
  * @author Nalin Angrish.
  */
-@SuppressWarnings("ConstantConditions")
 public class EditViewActivity extends FragmentActivity implements View.OnClickListener {
     /** A FAB to handle submit events. */
     FloatingActionButton finishB;
@@ -125,11 +127,21 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
                                 }
                                 Statics.createPdf(getApplication(), tBox.getText().toString());
                             }else {
-                                Toast.makeText(getApplicationContext(), "A PDF with this name already exists. Please try again with a different name.", Toast.LENGTH_LONG).show();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "A PDF with this name already exists. Please try again with a different name.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
                                 shouldClose = false;
                             }
                         }catch (Exception e){
-                            Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Couldn't create PDF, Please try again", Toast.LENGTH_LONG).show();
+                                }
+                            });
                             e.printStackTrace();
                             shouldClose = false;
                         }
@@ -152,6 +164,17 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 window.dismiss();
+            }
+        });
+
+        ((EditText)window.getContentView().findViewById(R.id.pdfName)).setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    window.getContentView().findViewById(R.id.end).performClick();
+                    return true;
+                }
+                return false;
             }
         });
     }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -29,7 +28,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.nalinstudios.iscan.MainActivity;
-import com.nalinstudios.iscan.edit.PDFEditActivity;
 import com.nalinstudios.iscan.R;
 
 import java.io.File;
@@ -40,19 +38,19 @@ import java.io.File;
  */
 public class PdfCard{
     /** The main view that contains the content for the PDF Card*/
-    private View content;
+    private final View content;
     /** The thumbnail icon for the PDF Card*/
-    private ImageView thumbnail;
+    private final ImageView thumbnail;
     /** The TextView representing the Title of the PDF*/
-    private TextView title;
+    private final TextView title;
     /** The imagebuttons present on the CardView*/
-    private ImageButton view, share, options;
+    private final ImageButton view, share, options;
     /** The context of the application */
-    private Context context;
+    private final Context context;
     /** The activity creating the Card*/
-    private AppCompatActivity activity;
+    private final AppCompatActivity activity;
     /** The thumbnail file which can be used to get the original PDF File*/
-    private File file;
+    private final File file;
 
     /**
      * The constructor of the class to get all the meta-data of the PDF.
@@ -137,8 +135,6 @@ public class PdfCard{
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().toString().toLowerCase().contains("delete")){
                             delete();
-                        }else if (item.getTitle().toString().toLowerCase().contains("edit")){
-                            edit();
                         }else if (item.getTitle().toString().toLowerCase().contains("rename")){
                             rename();
                         }
@@ -263,16 +259,6 @@ public class PdfCard{
                 .show();
     }
 
-
-    /**
-     * A function to edit the file when the user wants to.
-     */
-    private void edit(){
-        Intent i = new Intent(activity, PDFEditActivity.class);
-        i.setData(Uri.fromFile(getFile(file)));
-        activity.startActivity(i);
-        Toast.makeText(activity, "Signal Sent", Toast.LENGTH_LONG).show();
-    }
 
 
     /**

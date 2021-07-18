@@ -29,4 +29,14 @@
     <string name="low_memory_message">Your phone is low on memory, you may feel some lags while editing images.</string>
     <string name="more">See more &#8230;</string>
     <string name="finish_skip">Finish / Skip</string>
+    <string name="title_activity_p_d_f_view">IScan PDF Viewer</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="pdfmime">application/pdf</string>
 </resources>

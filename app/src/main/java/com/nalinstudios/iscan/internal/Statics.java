@@ -72,7 +72,7 @@ public class Statics {
         }
 
         Document doc = new Document(PageSize.A4,0,0,0,0);
-        PdfWriter.getInstance(doc, new FileOutputStream(pdf));
+        PdfWriter.getInstance(doc, new FileOutputStream(pdf)).setCompressionLevel(9);
         doc.open();
         doc.addAuthor("IScan - The Document Scanner");
         for (Bitmap image : images){
@@ -84,7 +84,9 @@ public class Statics {
             Bitmap page = Bitmap.createScaledBitmap(image,(int)pw,(int)ph,true);    // scale the bitmap so that the page width is standard (it looks clean and good)
             doc.setPageSize(new Rectangle(pw, ph));
             doc.newPage();
-            Image img = Image.getInstance(toByteArray(doSharpen(app, doSharpen(app ,page))));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            doSharpen(app, doSharpen(app ,page)).compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            Image img = Image.getInstance(baos.toByteArray());
             doc.add(img);
         }
 
@@ -99,17 +101,6 @@ public class Statics {
             copy(thumbnailFile, thumbnail);
         }
         clearData(app);
-    }
-
-    /**
-     * A function to get an array of bytes of the image so that the image can be added to the document.
-     * @param image The image to be decoded into byte array.
-     * @return The byte array for the image.
-     */
-    private static byte[] toByteArray(Bitmap image){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
     }
 
     /**

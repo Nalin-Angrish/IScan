@@ -39,7 +39,8 @@
                 android:ems="10"
                 android:hint="@string/enter_name_for_pdf"
                 android:importantForAutofill="no"
-                android:inputType="textCapSentences"/>
+                android:inputType="textCapSentences"
+                android:imeOptions="actionDone"/>
 
             <TextView
                 android:id="@+id/textView3"
