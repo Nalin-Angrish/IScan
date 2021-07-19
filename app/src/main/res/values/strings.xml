@@ -39,4 +39,6 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="pdfmime">application/pdf</string>
+    <string name="title_activity_import">ImportActivity</string>
+    <string name="file_mech_message">This new version of "IScan the Indian Scanner App" uses a different mechanism to store your PDFs, which improves file security, as well as allows you to use your scans with File pickers easily, which is suitable for uploading your files through Google Forms and other tasks. This new mechanism is implemented due to security concerns raised by Google, and now, this app does not have access to your previous scans.<br/><br/> Do you want to import them? (You can always do this later)</string>
 </resources>

@@ -16,15 +16,12 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/icon_round"
-        android:supportsRtl="false">
-        <activity android:name=".TutorialActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        android:supportsRtl="false"
+        android:theme="@style/Theme.IScan.NoActionBar"
+        android:hardwareAccelerated="true">
         <activity
             android:name=".SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -33,22 +30,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".ScannerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".extras.TutorialActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ListFileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ScannerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditViewActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

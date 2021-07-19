@@ -5,14 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,6 +50,8 @@ public class PdfCard{
     private final Context context;
     /** The activity creating the Card*/
     private final AppCompatActivity activity;
+    /** The maximum number of letters to show on the PDF card */
+    private final int charlim = 14;
     /** The thumbnail file which can be used to get the original PDF File*/
     private final File file;
 
@@ -79,8 +82,6 @@ public class PdfCard{
     public View getCard(){
         CardView card = new CardView(activity.getApplicationContext());
         card.addView(content);
-        int color = Color.rgb(255,255,255);
-        card.setCardBackgroundColor(color);
         card.setRadius(10);
         card.setUseCompatPadding(true);
         return card;
@@ -210,9 +211,9 @@ public class PdfCard{
         }catch (Exception e){
             name = file.getName();
         }
-        if (name.length() > 15){
+        if (name.length() > charlim){
             StringBuilder sb = new StringBuilder();
-            for (int i=0;i<15;i++){
+            for (int i=0;i<charlim;i++){
                 sb.append(name.charAt(i));
             }
             name = sb.toString() + "...";
@@ -273,9 +274,15 @@ public class PdfCard{
             name = file.getName();
         }
         ((TextView)p.findViewById(R.id.message)).setText("Rename ".concat(name).concat(" to:"));
-        final PopupWindow window = new PopupWindow(p, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        final PopupWindow window = new PopupWindow();
+        window.setContentView(p);
+        window.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setAnimationStyle(android.R.style.Animation_Dialog);
         window.showAtLocation(p, Gravity.CENTER, 0, 0);
+        window.setFocusable(true);
+        window.update();
+        Statics.dimBackground(window);
         window.getContentView().findViewById(R.id.end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -294,6 +301,16 @@ public class PdfCard{
             @Override
             public void onClick(View v) {
                 window.dismiss();
+            }
+        });
+        ((EditText)window.getContentView().findViewById(R.id.newPdfName)).setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    window.getContentView().findViewById(R.id.end).performClick();
+                    return true;
+                }
+                return false;
             }
         });
     }

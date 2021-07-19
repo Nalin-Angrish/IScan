@@ -109,6 +109,7 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
         window.showAtLocation(p, Gravity.CENTER, 0, 0);
         window.setFocusable(true);
         window.update();
+        Statics.dimBackground(window);
         window.getContentView().findViewById(R.id.end).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -242,6 +243,4 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
     protected synchronized void dismissDialog() {
         progressDialogFragment.dismissAllowingStateLoss();
     }
-
-
 }

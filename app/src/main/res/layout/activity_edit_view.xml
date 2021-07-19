@@ -32,9 +32,8 @@
         android:layout_marginBottom="10dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="#FF0000"
+        app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#DD0000"
         app:srcCompat="@android:drawable/ic_media_next" />
 </androidx.constraintlayout.widget.ConstraintLayout>

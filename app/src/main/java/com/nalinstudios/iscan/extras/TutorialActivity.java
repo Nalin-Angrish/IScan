@@ -1,4 +1,4 @@
-package com.nalinstudios.iscan;
+package com.nalinstudios.iscan.extras;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.nalinstudios.iscan.MainActivity;
+import com.nalinstudios.iscan.R;
 import com.nalinstudios.iscan.internal.LockedHScrollView;
 
 

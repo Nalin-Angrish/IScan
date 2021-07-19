@@ -3,10 +3,10 @@ package com.nalinstudios.iscan;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
+
+import com.nalinstudios.iscan.extras.TutorialActivity;
 
 
 /**
@@ -24,11 +24,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-
-        ImageView imgView = findViewById(R.id.splash);    // The imageView to show the splash icon
-        imgView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_foreground));
-
-
 
         new Handler().postDelayed(new Runnable() {
             @Override

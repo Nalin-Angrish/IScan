@@ -9,9 +9,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:background="@color/transparent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
@@ -37,9 +37,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/enter_name_for_pdf"
+                android:imeOptions="actionDone"
                 android:importantForAutofill="no"
-                android:inputType="textCapSentences"
-                android:imeOptions="actionDone"/>
+                android:inputType="textCapSentences" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -58,8 +58,9 @@
             <Button
                 android:id="@+id/cancel"
                 style="?android:attr/buttonBarStyle"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/cancel" />
 
             <Button

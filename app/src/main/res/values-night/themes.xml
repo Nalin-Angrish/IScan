@@ -1,19 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
+    <!-- Base application theme. -->
     <style name="Theme.IScan" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryVariant">@color/green</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryVariant">@color/purple</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/crimson</item>
-        <item name="colorSecondaryVariant">@color/crimson</item>
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/blue</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="backgroundColor">@color/white</item>
-        <item name="backgroundTint">@color/whiteTint</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundColor">@color/black</item>
+        <item name="backgroundTint">@color/blackTint</item>
     </style>
 
     <style name="Theme.IScan.NoActionBar">

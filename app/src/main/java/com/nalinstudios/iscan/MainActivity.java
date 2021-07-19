@@ -1,12 +1,11 @@
 package com.nalinstudios.iscan;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nalinstudios.iscan.extras.TutorialActivity;
 import com.nalinstudios.iscan.internal.PdfCard;
 import com.nalinstudios.iscan.internal.Statics;
 
@@ -21,7 +20,6 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -106,16 +104,10 @@ public class MainActivity extends AppCompatActivity {
         int limit;
         if(folder.length == 0){ // That means there are no PDFs scanned
             getLayoutInflater().inflate(R.layout.noscan, (LinearLayout)findViewById(R.id.__main__));
-            ImageView img = findViewById(R.id.noscanimg);
-            img.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_foreground));
             super.onResume();
             return;
         }
-        if (folder.length < stdlimit){
-            limit = folder.length;
-        }else {
-            limit = stdlimit;
-        }
+        limit = Math.min(folder.length, stdlimit);
         try {
             for (int i=0;i<limit;i++) {
                 File file = folder[i];
@@ -130,15 +122,13 @@ public class MainActivity extends AppCompatActivity {
         if (folder.length > stdlimit){ // I.E., the no. of files was more than the standard limit
             // We need to show the user the option to see older files
             CardView card = new CardView(this);
-            int color = Color.rgb(255,255,255);
-            card.setCardBackgroundColor(color);
             card.setRadius(10);
             card.setUseCompatPadding(true);
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MainActivity.this, ListFileActivity.class);
-                    intent.putExtra("path", "/storage/emulated/0/IScan/");
+                    intent.putExtra("path", new File(Environment.getExternalStorageDirectory(), "IScan"));
                     startActivity(intent);
                 }
             });
