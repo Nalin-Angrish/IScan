@@ -120,7 +120,7 @@ public class EditViewActivity extends FragmentActivity implements View.OnClickLi
                         boolean shouldClose = true;
                         try {
                             EditText tBox = window.getContentView().findViewById(R.id.pdfName);
-                            if (Statics.isAvailable(tBox.getText().toString())) {
+                            if (Statics.isAvailable(tBox.getText().toString(), EditViewActivity.this)) {
                                 for (ResultFragment frag : fragList) {
                                     if (!frag.deleted){
                                         frag.finish();

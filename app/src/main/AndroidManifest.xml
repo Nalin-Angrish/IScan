@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.nalinstudios.iscan">
 
     <uses-feature android:name="android.hardware.camera" />
@@ -11,17 +12,17 @@
 
     <application
         android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="false"
-        android:theme="@style/Theme.IScan.NoActionBar"
-        android:hardwareAccelerated="true">
+        tools:replace="android:theme"
+        android:theme="@style/Theme.IScan.NoActionBar">
         <activity
             android:name=".SplashActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -36,6 +37,9 @@
             android:name=".extras.TutorialActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".extras.ImportActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ListFileActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -44,6 +48,7 @@
         <activity
             android:name=".EditViewActivity"
             android:screenOrientation="portrait" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -54,6 +59,17 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
+        </provider>
+        <provider
+            android:name="com.nalinstudios.iscan.extras.ScanProvider"
+            android:authorities="com.nalinstudios.iscan"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action
+                    android:name="android.content.action.DOCUMENTS_PROVIDER"/>
+            </intent-filter>
         </provider>
     </application>
 

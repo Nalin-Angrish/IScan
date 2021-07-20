@@ -156,7 +156,7 @@ public class PdfCard{
      * @return The file object of the PDF.
      */
     private File getFile(File file){
-        File folder = new File(Environment.getExternalStorageDirectory(), "IScan");
+        File folder = activity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         String pdfName;
         try {
             pdfName = file.getName().replace(".jpg", ".pdf");
@@ -288,7 +288,7 @@ public class PdfCard{
             public void onClick(View v){
                 EditText tBox = window.getContentView().findViewById(R.id.newPdfName);
                 window.dismiss();
-                if (Statics.isAvailable(tBox.getText().toString())){
+                if (Statics.isAvailable(tBox.getText().toString(), activity)){
                     String name = tBox.getText().toString();
                     File actual = getFile(file);
                     System.out.println(actual.renameTo(new File(actual.getParentFile(), name+".pdf")));

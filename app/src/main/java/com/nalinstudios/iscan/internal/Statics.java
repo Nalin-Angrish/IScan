@@ -63,7 +63,7 @@ public class Statics {
      * @throws DocumentException Thrown if the Document could not be created,
      */
     public static void createPdf(Application app, String name) throws IOException, DocumentException {
-        File pdfFolder = new File(Environment.getExternalStorageDirectory(), "IScan");
+        File pdfFolder = app.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         if (!pdfFolder.exists()){System.out.println(pdfFolder.mkdir());}
         File pdf = new File(pdfFolder, name+".pdf");
         if (!pdf.exists()){System.out.println(pdfFolder.createNewFile());}
@@ -163,8 +163,8 @@ public class Statics {
      * @param name the name to check of existence of
      * @return whether or not the name is available (true/false)
      */
-    public static boolean isAvailable(String name){
-        File folder = new File(Environment.getExternalStorageDirectory(), "IScan");
+    public static boolean isAvailable(String name, Context ctx){
+        File folder = ctx.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         String [] files = folder.list();
         for (String file: files){
             if (file.toLowerCase().equals(name.toLowerCase() + ".pdf")){

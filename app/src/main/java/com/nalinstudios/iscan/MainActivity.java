@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nalinstudios.iscan.extras.ImportActivity;
 import com.nalinstudios.iscan.extras.TutorialActivity;
 import com.nalinstudios.iscan.internal.PdfCard;
 import com.nalinstudios.iscan.internal.Statics;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         clear();
 
-        File mainf = new File(Environment.getExternalStorageDirectory(), "IScan");
+        File mainf = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         if (!mainf.exists()){
             // noinspection all
             mainf.mkdir();
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         getApplicationContext().getSharedPreferences("IScan", MODE_PRIVATE).edit().putString("sessionName", Statics.randString()).apply();
-        File[] folder = new File(new File(Environment.getExternalStorageDirectory(), "IScan"), ".data-internal").listFiles();
+        File[] folder = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), ".data-internal").listFiles();
         if (folder==null){folder=new File[]{};}
         Arrays.sort(folder, new Comparator<File>() {
             public int compare(File f1, File f2) {
@@ -105,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
         if(folder.length == 0){ // That means there are no PDFs scanned
             getLayoutInflater().inflate(R.layout.noscan, (LinearLayout)findViewById(R.id.__main__));
             super.onResume();
+            File dir = new File(Environment.getExternalStorageDirectory(), "IScan");
+            if(dir.exists() && dir.canRead() && dir.list() != null && dir.list().length > 0) {
+                // If the files are present in the old storage directory, start the Import process.
+                Intent i = new Intent(MainActivity.this, ImportActivity.class);
+                startActivity(i);
+            }
             return;
         }
         limit = Math.min(folder.length, stdlimit);
@@ -128,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MainActivity.this, ListFileActivity.class);
-                    intent.putExtra("path", new File(Environment.getExternalStorageDirectory(), "IScan"));
+                    intent.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
                     startActivity(intent);
                 }
             });
