@@ -130,8 +130,14 @@ public class ScanProvider extends DocumentsProvider {
     @Override
     public AssetFileDescriptor openDocumentThumbnail(String documentId, Point sizeHint, CancellationSignal signal) throws FileNotFoundException {
         final File file = getFileForDocId(documentId);
-        final ParcelFileDescriptor pfd =
-                ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+        String filename = file.getName();
+        if(filename.endsWith(".pdf")){
+            filename = filename.replace(".pdf", ".jpg");  // If name consists extension, replace it's extension to jpg
+        }else{
+            filename += ".jpg";  // If name does not contains extension, add jpg extension.
+        }
+        File imageFile = new File(new File(getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), ".data-internal"), filename);
+        final ParcelFileDescriptor pfd = ParcelFileDescriptor.open(imageFile, ParcelFileDescriptor.MODE_READ_ONLY);
         return new AssetFileDescriptor(pfd, 0, AssetFileDescriptor.UNKNOWN_LENGTH);
     }
 
