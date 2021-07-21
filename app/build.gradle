@@ -7,8 +7,8 @@ android {
         applicationId "com.nalinstudios.iscan"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 160
-        versionName "1.6.0"
+        versionCode 180   // Setting versionCode as 180 for space for updates upto 200 till we get a stable 2.0.0 versionName
+        versionName "2.0.0-alpha"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
